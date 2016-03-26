@@ -1,0 +1,159 @@
+{
+  "title": "Duty To God App",
+  "id": 1,
+  "formatVersion": 2,
+  "ideas": {
+    "1": {
+      "title": "Login",
+      "id": 2,
+      "ideas": {
+        "1": {
+          "title": "Remember Me for a long time",
+          "id": 4,
+          "ideas": {
+            "1": {
+              "title": "Just set the session lenght?",
+              "id": 5
+            }
+          }
+        },
+        "2": {
+          "title": "Create new account",
+          "id": 8,
+          "ideas": {
+            "1": {
+              "title": "Name",
+              "id": 9
+            },
+            "2": {
+              "title": "Mobile phone",
+              "id": 10
+            },
+            "3": {
+              "title": "Ward name",
+              "id": 11
+            },
+            "4": {
+              "title": "Decide who to share with",
+              "id": 12
+            },
+            "5": {
+              "title": "Receive and Send Notifications?",
+              "id": 34,
+              "attr": {
+                "style": {}
+              }
+            },
+            "2.5": {
+              "title": "Priesthood Office / Role",
+              "id": 28
+            }
+          }
+        }
+      }
+    },
+    "2": {
+      "title": "Sections",
+      "id": 19,
+      "ideas": {
+        "1": {
+          "title": "Deacons",
+          "id": 20
+        },
+        "2": {
+          "title": "Teachers",
+          "id": 21
+        },
+        "3": {
+          "title": "Priests",
+          "id": 22
+        },
+        "0.5": {
+          "title": "General",
+          "id": 30,
+          "attr": {
+            "style": {}
+          },
+          "ideas": {
+            "1": {
+              "title": "Can I use the artwork from the current booklet?",
+              "id": 31,
+              "ideas": {}
+            },
+            "2": {
+              "title": "Use different colors for different sections",
+              "id": 36
+            }
+          }
+        }
+      }
+    },
+    "3": {
+      "title": "Stats for Quorum Presidents / Advisors",
+      "id": 32
+    },
+    "4": {
+      "title": "Reference Material",
+      "id": 37,
+      "ideas": {
+        "1": {
+          "title": "Sunday Lessons",
+          "id": 38
+        },
+        "2": {
+          "title": "Scouting  Synergy",
+          "id": 39
+        },
+        "3": {
+          "title": "Sacrament Meeting Topics",
+          "id": 40
+        }
+      }
+    },
+    "-1": {
+      "title": "Settings",
+      "id": 13,
+      "ideas": {
+        "1": {
+          "title": "Name",
+          "id": 15
+        },
+        "2": {
+          "title": "Mobile Phone",
+          "id": 16
+        },
+        "3": {
+          "title": "Ward name",
+          "id": 17
+        },
+        "4": {
+          "title": "Decide who to share with",
+          "id": 18
+        },
+        "5": {
+          "title": "Receive and Send Notifications?",
+          "id": 33
+        },
+        "2.5": {
+          "title": "Priesthood Office / Role",
+          "id": 27
+        }
+      }
+    },
+    "-2": {
+      "title": "Show Overall Progress",
+      "id": 23,
+      "ideas": {}
+    },
+    "-12": {
+      "title": "Completing A section:",
+      "id": 25,
+      "ideas": {
+        "1": {
+          "title": "Prompt to notify members of quorum",
+          "id": 26
+        }
+      }
+    }
+  }
+}
