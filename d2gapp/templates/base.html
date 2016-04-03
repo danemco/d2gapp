@@ -1,0 +1,43 @@
+<html>
+<head>
+<title>{% block title %}Duty To God App{% endblock %}</title>
+<!-- Material Design fonts -->
+<link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Roboto:300,400,500,700">
+<link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/icon?family=Material+Icons">
+
+<!-- Bootstrap -->
+<link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+
+<!-- Bootstrap Material Design -->
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/bootstrap.material-design/0.5.9/css/bootstrap-material-design.min.css">
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/bootstrap.material-design/0.5.9/css/ripples.min.css">
+
+
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="page-header">
+                <h1>Duty To God App</h1>
+{% block content %}
+
+{% endblock %}
+            </div>
+            <input type="text" placeholder="Search" class="form-control col-md-8">
+            <button type="button" class="btn btn-raised btn-default">Test Button</button
+            <span class="material-input"></span>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-1.12.2.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/bootstrap.material-design/0.5.9/js/ripples.min.js"></script>
+<script src="https://cdn.jsdelivr.net/bootstrap.material-design/0.5.9/js/material.min.js"></script>
+<script>
+  $(function () {
+    $.material.init();
+  });
+</script>
+</body>
+</html>
