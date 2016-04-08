@@ -18,8 +18,8 @@ SECTION = (
 
 # Create your models here.
 class Assignment(models.Model):
-    office = models.CharField(max_length = 2, choices = OFFICE)
-    section = models.CharField(max_length = 5, choices = SECTION)
+    office = models.CharField(max_length = 2, choices = OFFICE, default='d')
+    section = models.CharField(max_length = 5, choices = SECTION, default='ss')
     title = models.CharField(max_length = 200)
     learn = models.TextField()
     act1 = models.TextField()

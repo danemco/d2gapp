@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% for assignment in assignment_list %}
+  <a href="javascript:void(0)" class="btn btn-default btn-lg btn-block btn-raised">{{ assignment.title }}</a>
+{% empty %}
+  There are no assignments.
+{% endfor %}
+{% endblock %}
