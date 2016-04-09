@@ -4,5 +4,6 @@ from . import views
 
 urlpatterns = [
         url(r'^$', views.AssignmentListView.as_view(), name="assignment_list"),
+        url(r'^assignment/(?P<pk>\d+)/$', views.AssignmentDetailView.as_view(), name="assignment_detail"),
 
 ]

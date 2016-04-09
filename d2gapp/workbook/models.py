@@ -49,5 +49,7 @@ class PersonProgress(models.Model):
     def __unicode__(self):
         return "%s - %s" % (self.profile, self.assignment)
 
+    class Meta:
+        verbose_name_plural = 'person progress records'
     
     

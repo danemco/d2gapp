@@ -6,3 +6,6 @@ from .models import Assignment, PersonProgress
 # Create your views here.
 class AssignmentListView(ListView):
     model = Assignment
+
+class AssignmentDetailView(DetailView):
+    model = Assignment

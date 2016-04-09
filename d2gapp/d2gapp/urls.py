@@ -19,6 +19,8 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.views.generic import TemplateView
 
+admin.site.site_header = 'Duty To God App Admin'
+
 urlpatterns = [
     url(r'^', include('workbook.urls')),
     url(r'^admin/', admin.site.urls),
