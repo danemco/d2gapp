@@ -41,8 +41,8 @@ class PersonProgress(models.Model):
     profile = models.ForeignKey(Profile)
     assignment = models.ForeignKey(Assignment)
     act1 = models.TextField()
-    act2 = models.TextField()
-    share = models.TextField()
+    act2 = models.TextField(blank = True, null = True)
+    share = models.TextField(blank = True, null = True)
     date_completed = models.DateTimeField(auto_now_add = True)
     shared_with = models.CharField(max_length=30)
 
