@@ -1,7 +1,33 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<table class="table">
-    {{ form }}
-</table>
+<h1>{{ assignment.title }}</h1>
+<h3>{{ assignment.get_office_display }} - {{ assignment.get_section_display }}</h3>
+<form action="." method="post">
+    {% csrf_token %}
+{{ form.non_field_errors }}
+<h2>Learn</h2>
+{{ assignment.learn|safe }}
+<h2>Act</h2>
+{{ assignment.act1|safe }}
+    {{ form.act1.errors }}
+    {{ form.act1 }}
+    {% if assignment.act2 %}
+        {{ assignment.act2|safe }}
+    {{ form.act2.errors }}
+    {{ form.act2 }}
+    {% endif %}
+<h2>Share</h2>
+{{ assignment.share|safe }}
+{% if assignment.share_has_textarea %}
+    {{ form.share.errors }}
+    {{ form.share }}
+{% endif %}
+
+{{ form.assignment }}
+{{ form.profile }}
+
+<hr>
+    <button type="submit" class="btn btn-raised btn-primary">Save</button>
+</form>
 {% endblock %}

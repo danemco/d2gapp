@@ -5,7 +5,11 @@ class AssignmentForm(forms.ModelForm):
 
     class Meta:
         model = PersonProgress
-        fields = ['act1', 'act2', 'share']
+        fields = ['profile', 'assignment', 'act1', 'act2', 'share']
+        widgets = {
+                'profile': forms.HiddenInput(),
+                'assignment': forms.HiddenInput(),
+                }
 
     def __init__(self, assignment, *args, **kwargs):
         super(AssignmentForm, self).__init__(*args, **kwargs)

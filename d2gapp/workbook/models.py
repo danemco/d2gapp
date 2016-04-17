@@ -44,7 +44,7 @@ class PersonProgress(models.Model):
     act2 = models.TextField(blank = True, null = True)
     share = models.TextField(blank = True, null = True)
     date_completed = models.DateTimeField(auto_now_add = True)
-    shared_with = models.CharField(max_length=30)
+    shared_with = models.CharField(max_length=30, blank = True, null = True)
 
     def __unicode__(self):
         return "%s - %s" % (self.profile, self.assignment)
