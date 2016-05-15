@@ -1,10 +1,15 @@
 from django.shortcuts import render, get_object_or_404
 from django.views.generic import DetailView, TemplateView, ListView
-from django.views.generic.edit import CreateView
+from django.views.generic.edit import CreateView, FormView
 from django.core.urlresolvers import reverse_lazy
 
-from .models import Assignment, PersonProgress, Profile
-from .forms import AssignmentForm
+from .models import Assignment, PersonProgress, Profile, ProfileNotify
+from .forms import AssignmentForm, RegistrationForm
+from django.contrib.auth.models import User
+
+import random
+
+RANDOM_ALPHABET = 'abcdfghjklmnpqrstuvwxyzABCDFGHJKLMNPQRSTVWXYZ1234567890'
 
 # Create your views here.
 class AssignmentListView(ListView):
@@ -34,5 +39,30 @@ class CompleteAssignmentView(CreateView):
         init_data['assignment'] = get_object_or_404(Assignment, pk = self.kwargs.get('assignment', None))
         return init_data
 
+class RegisterView(FormView):
+    form_class = RegistrationForm
+    success_url = '/thanks/' # TODO edit this
+    template_name = 'workbook/register_user.html'
 
+    form_valid(self, form):
+        try:
+            # got the rand_strong concept from stackoverflow.com/questions/2257441
+            rand_string = ''.join(random.choice(RANDOM_ALPHABET) for _ in range(6))
+            u = User()
+            p = Profile() 
+            u.first_name = form.cleaned_data['first_name']
+            u.last_login = form.cleaned_data['last_name']
+            # username is first name plus last name plus random string
+            u.username = form.cleaned_data['first_name'].replace(' ', '_') \ 
+                         + form.cleaned_data['last_name'].replace(' ', '_') \
+                         + rand_string
+            u.save()
+            p.user = u
+            p.office = form.cleaned_data['office']
+            p.phone = form.cleaned_data['phone']
+            p.ward = form.cleaned_data['ward']
+            p.save()
 
+        except:
+            pass
+        return super(RegisterView, self).form_valid(form)

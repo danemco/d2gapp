@@ -7,6 +7,7 @@ OFFICE = (
     ('d', 'Deacon'),
     ('t', 'Teacher'),
     ('p', 'Priest'),
+    ('-', 'Leader, Bishop, Advisor'),
 )
 
 SECTION = (
@@ -31,11 +32,25 @@ class Assignment(models.Model):
         return self.title
 
 class Profile(models.Model):
-    user = models.ForeignKey(User)
+    user = models.OneToOneField(User)
     office = models.CharField(max_length = 2, choices = OFFICE)
+    phone = models.CharField(max_length = 10, "phone number", help_text="Phone number for receiving text messages and for connecting you with others", blank = True, null = True)
+    ward = models.CharField(max_length = 50, "ward or branch", blank = True, null = True)
 
     def __unicode__(self):
         return self.user.username
+
+class ProfileNotify(models.Model):
+    """
+    This model collects the names and phone numbers of those that the young man wishes to 
+    notify when an assignment is completed.
+    """
+    profile = models.ForeignKey(Profile)
+    phone = models.CharField(max_length = 10)
+    name = models.CharField(max_length = 50)
+
+    def __unicode__(self):
+        return "%s - %s (%s)" % (self.profile, self.name, self.phone)
 
 class PersonProgress(models.Model):
     profile = models.ForeignKey(Profile)
