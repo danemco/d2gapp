@@ -44,7 +44,7 @@ class RegisterView(FormView):
     success_url = '/thanks/' # TODO edit this
     template_name = 'workbook/register_user.html'
 
-    form_valid(self, form):
+    def form_valid(self, form):
         try:
             # got the rand_strong concept from stackoverflow.com/questions/2257441
             rand_string = ''.join(random.choice(RANDOM_ALPHABET) for _ in range(6))
@@ -53,7 +53,7 @@ class RegisterView(FormView):
             u.first_name = form.cleaned_data['first_name']
             u.last_login = form.cleaned_data['last_name']
             # username is first name plus last name plus random string
-            u.username = form.cleaned_data['first_name'].replace(' ', '_') \ 
+            u.username = form.cleaned_data['first_name'].replace(' ', '_') \
                          + form.cleaned_data['last_name'].replace(' ', '_') \
                          + rand_string
             u.save()

@@ -34,8 +34,8 @@ class Assignment(models.Model):
 class Profile(models.Model):
     user = models.OneToOneField(User)
     office = models.CharField(max_length = 2, choices = OFFICE)
-    phone = models.CharField(max_length = 10, "phone number", help_text="Phone number for receiving text messages and for connecting you with others", blank = True, null = True)
-    ward = models.CharField(max_length = 50, "ward or branch", blank = True, null = True)
+    phone = models.CharField("phone number", max_length = 10, help_text="Phone number for receiving text messages and for connecting you with others", blank = True, null = True)
+    ward = models.CharField("ward or branch", max_length = 50, blank = True, null = True)
 
     def __unicode__(self):
         return self.user.username
