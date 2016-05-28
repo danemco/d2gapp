@@ -19,16 +19,8 @@ class AssignmentForm(forms.ModelForm):
         if not assignment.share_has_textarea:
             self.fields['share'].widget = forms.HiddenInput()
 
-class RegistrationForm(forms.Form):
-    """
-    This form handles the registration for new users. It collects the information needed to 
-    create a user object and also basics for user's profile.
-    """
-    first_name = forms.CharField()
-    last_name  = forms.CharField()
-    email_address = forms.EmailField()
+class ProfileLoginForm(forms.Form):
     phone = forms.CharField()
-    ward = forms.CharField()
-    office = forms.ChoiceField(choices=OFFICE)
-    
+    last_name = forms.CharField()
+
 

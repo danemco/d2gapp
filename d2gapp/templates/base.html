@@ -23,6 +23,13 @@
                 <h1>Duty To God App</h1>
             </div>
             <div>
+                {% block messages %}
+                 {% if messages %}
+                      {% for message in messages %}
+                      <div class="alert alert-{% if message.tags == "error"%}danger{% else %}success{% endif %}"><p>{{ message }}</p></div>
+                      {% endfor %}
+                  {% endif %}
+                {% endblock %}
 {% block content %}
 blah blah blah
 {% endblock %}

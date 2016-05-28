@@ -1,7 +1,6 @@
 from __future__ import unicode_literals
 
 from django.db import models
-from django.contrib.auth.models import User
 
 OFFICE = (
     ('d', 'Deacon'),
@@ -32,9 +31,11 @@ class Assignment(models.Model):
         return self.title
 
 class Profile(models.Model):
-    user = models.OneToOneField(User)
+    first_name = models.CharField(max_length=25)
+    last_name = models.CharField(max_length=25)
     office = models.CharField(max_length = 2, choices = OFFICE)
-    phone = models.CharField("phone number", max_length = 10, help_text="Phone number for receiving text messages and for connecting you with others", blank = True, null = True)
+    phone = models.CharField("phone number", max_length = 10, help_text="Phone number for identifying your account")
+    receive_text_messages = models.BooleanField(default=True)
     ward = models.CharField("ward or branch", max_length = 50, blank = True, null = True)
 
     def __unicode__(self):
