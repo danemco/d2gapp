@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block title %}Create A Profile{% endblock %}
+
+{% block extrascripts %}
+<script>
+$(function () {
+ $('#songform').submit(
+    function (event) {
+
+        event.preventDefault();
+
+        $.ajax({
+            url: $(this).attr('action'),
+            type: 'post',
+            data: $(this).serialize(),
+            success: function (data) {
+                    $('#status').text('Successfully updated ' + data.title).show().fadeOut(5000);
+                    
+                    console.log(data);
+                },
+            error: function (xd4, statusText, errorText) {
+                    $('#status').text('Uh oh. Something didn\'t go right.');
+                    console.log("error was " + statusText + " and error text was " + errorText);
+                },
+        });
+    });
+
+    $("#increment").click(
+    function (event) {
+        form = $(this).parents("form");
+        form.find("#id_musician").val(Number(form.find("#id_musician").val()) + 1);
+        form.submit();
+    });
+
+    $("#decrement").click(
+    function (event) {
+        form = $(this).parents("form");
+        form.find("#id_musician").val(Number(form.find("#id_musician").val()) - 1);
+        form.submit();
+    });
+});
+
+</script>
+{% endblock %}
+
+{% block content %}
+<h2>{% if object %}Update{% else %}Create{% endif %} Profile</h2>
+<form action="." method="post">
+    {% csrf_token %}
+    <table style="table">
+    {{ form }}
+    </table>
+    <button type="submit">{% if object %}Update{% else %}Create{% endif %} Profile</button>
+</form>
+
+<hr>
+<h3>Notification List</h3>
+<p>List the people you would like to notify when you complete an assignment. Examples could be parents, advisors, quorum presidents, and Duty To God specialists.</p>
+<form action="{% url 'profile_notify_add' %}" method="post">
+    {% csrf_token %}
+    <table class="table">
+        {{ form }}
+    </table>
+</form>
+
+{% endblock %}

@@ -1,8 +1,8 @@
 from django.shortcuts import render, get_object_or_404
 from django.views.generic import DetailView, TemplateView, ListView
-from django.views.generic.edit import CreateView, FormView, UpdateView
+from django.views.generic.edit import CreateView, FormView, UpdateView, DeleteView
 from django.core.urlresolvers import reverse_lazy, reverse
-from django.http import Http404
+from django.http import Http404, JsonResponse
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib import messages
 from django.http.response import HttpResponseRedirect
@@ -10,11 +10,30 @@ from django.http.response import HttpResponseRedirect
 from .models import Assignment, PersonProgress, Profile, ProfileNotify
 from .forms import AssignmentForm, ProfileLoginForm
 
-import random
-
-RANDOM_ALPHABET = 'abcdfghjklmnpqrstuvwxyzABCDFGHJKLMNPQRSTVWXYZ1234567890'
-
 # Create your views here.
+class AjaxableResponseMixin(object):
+    """
+    Mixin to add AJAX support to a form.
+    Must be used with an object-based FormView (e.g. CreateView)
+    """
+    def form_invalid(self, form):
+        response = super(AjaxableResponseMixin, self).form_invalid(form)
+        if self.request.is_ajax():
+            return JsonResponse(form.errors, status=400)
+        else:
+            return response
+
+    def form_valid(self, form):
+        # We make sure to call the parent's form_valid() method because
+        # it might do some processing (in the case of CreateView, it will
+        # call form.save() for example).
+        response = super(AjaxableResponseMixin, self).form_valid(form)
+        if self.request.is_ajax():
+            data = model_to_dict(self.object)
+            return JsonResponse(data)
+        else:
+            return response
+
 class AssignmentListView(ListView):
     model = Assignment
 
@@ -112,3 +131,22 @@ class ProfileLogoutView(TemplateView):
             pass
 
         return super(ProfileLogoutView, self).get(request, *args, **kwargs)
+
+class ProfileNotifyAdd(AjaxableResponseMixin, CreateView):
+    model = ProfileNotify
+    fields = ['phone', 'name']
+    success_url = reverse_lazy('profile_detail')
+
+    def form_valid(self, form):
+        try:
+            pid = self.request.session.get('profile_id')
+            p = Profile.objects.get(pk=pid)
+        except ObjectDoesNotExist:
+            raise Http404("No profile found. Try logging in or creating one.") 
+        form.instance.profile = p
+        return super(ProfileNotifyAdd, self).form_valid(form)
+
+class ProfileNotifyDelete(AjaxableResponseMixin, DeleteView):
+    model = ProfileNotify
+    success_url = reverse_lazy('profile_detail')
+
