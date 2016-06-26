@@ -5,10 +5,11 @@ from django.core.urlresolvers import reverse_lazy, reverse
 from django.http import Http404, JsonResponse
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib import messages
+from django.forms.models import model_to_dict
 from django.http.response import HttpResponseRedirect
 
 from .models import Assignment, PersonProgress, Profile, ProfileNotify
-from .forms import AssignmentForm, ProfileLoginForm
+from .forms import AssignmentForm, ProfileLoginForm, ProfileNotifyForm
 
 # Create your views here.
 class AjaxableResponseMixin(object):
@@ -86,6 +87,11 @@ class UpdateProfileView(UpdateView):
             raise Http404("No profile found. Try logging in or creating one.") 
         return p
 
+    def get_context_data(self):
+        context = super(UpdateProfileView, self).get_context_data()
+        context['form2'] = ProfileNotifyForm
+        return context
+
 class ProfileDetailView(TemplateView):
     template_name = 'workbook/profile_detail.html'
     
@@ -144,6 +150,8 @@ class ProfileNotifyAdd(AjaxableResponseMixin, CreateView):
         except ObjectDoesNotExist:
             raise Http404("No profile found. Try logging in or creating one.") 
         form.instance.profile = p
+        if not self.request.is_ajax:
+            messages.add_message(self.request, messages.SUCCESS, "%s successfully added to notification list." % form.instance.name)
         return super(ProfileNotifyAdd, self).form_valid(form)
 
 class ProfileNotifyDelete(AjaxableResponseMixin, DeleteView):

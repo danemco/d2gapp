@@ -27,6 +27,25 @@
     </tr>
 </table>
 
+<h3>Notification List</h3>
+<table class="table">
+    <tr>
+        <th>Name</th>
+        <th>Phone Number</th>
+    </tr>
+{% for person in profile.profilenotify_set.all %}
+    <tr>
+        <td>{{ person.name }}</td>
+        <td>{{ person.phone }}</td>
+    </tr>
+{% empty %}
+<tr>
+    <td colspan="2">
+        <p>You don't have any people set to receive a notification for completed assignments.</p>
+    </td>
+</tr>
+{% endfor %}
+</table>
 
-<a href="{% url 'profile_update' %}" class="btn">Update Profile</a>
+<a href="{% url 'profile_update' %}" class="btn btn-raised">Update Profile</a>
 {% endblock %}

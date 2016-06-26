@@ -39,7 +39,7 @@ class Profile(models.Model):
     ward = models.CharField("ward or branch", max_length = 50, blank = True, null = True)
 
     def __unicode__(self):
-        return self.user.username
+        return "%s %s" % (self.first_name, self.last_name)
 
 class ProfileNotify(models.Model):
     """

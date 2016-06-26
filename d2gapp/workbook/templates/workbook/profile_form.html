@@ -1,10 +1,54 @@
 {% extends 'base.html' %}
 
-{% block title %}Create A Profile{% endblock %}
+{% block title %}{% if object %}Update{% else %}Create{% endif %} A Profile{% endblock %}
 
 {% block extrascripts %}
 <script>
 $(function () {
+ 
+
+    $('.delnotify').submit(function(e) {
+        e.preventDefault();
+        if (confirm("Are you sure you want to no longer auto-notify this person?")) {
+            var myform = $(this)
+            $.ajax({
+                type: 'post',
+                url: $(this).attr('action'),
+                success: function() {
+                    myform.parent().parent().remove();
+                },
+                data: $(this).serialize(),
+                error: function() {},
+            });
+        }
+    });
+
+    $('#addnotify').submit(function(e) {
+        e.preventDefault();
+        var myform = $(this)
+        $.ajax({
+            type: 'post',
+            url: $(this).attr('action'),
+            success: function(data) {
+                myform.parent().before(" \
+    <tr>                                 \
+        <td>" + data["name"] + "</td>    \
+        <td>" + data["phone"] + "</td>   \
+        <td><form class=\"delnotify\" action=\"/profile/notify/delete/" + data["id"] + "/\" method=\"post\">  \
+                {% csrf_token %}  \
+                <button type=\"submit\" class=\"btn btn-raised btn-danger delnotify\">x</button>    \
+            </form> \
+        </td> \
+    </tr> ");
+                myform[0].reset();
+            },
+            data: $(this).serialize(),
+            error: function() {},
+        });
+    });
+
+
+
  $('#songform').submit(
     function (event) {
 
@@ -57,11 +101,37 @@ $(function () {
 <hr>
 <h3>Notification List</h3>
 <p>List the people you would like to notify when you complete an assignment. Examples could be parents, advisors, quorum presidents, and Duty To God specialists.</p>
-<form action="{% url 'profile_notify_add' %}" method="post">
+<table class="table">
+    <tr>
+        <th>Name</th>
+        <th>Phone Number</th>
+        <th>Delete?</th>
+    </tr>
+{% for person in profile.profilenotify_set.all %}
+    <tr>
+        <td>{{ person.name }}</td>
+        <td>{{ person.phone }}</td>
+        <td><form class="delnotify" action="{% url 'profile_notify_delete' person.id %}" method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-raised btn-danger delnotify">x</button>
+            </form>
+        </td>
+    </tr>
+{% empty %}
+<tr>
+    <td colspan="2">
+        <p>You don't have any people set to receive a notification for completed assignments.</p>
+    </td>
+</tr>
+{% endfor %}
+<!-- Add another notify -->
+<tr>
+<form action="{% url 'profile_notify_add' %}" method="post" id="addnotify">
     {% csrf_token %}
-    <table class="table">
-        {{ form }}
-    </table>
+    <td><input id="id_name" maxlength="50" name="name" placeholder="Name" type="text" /></td>
+    <td><input id="id_phone" maxlength="10" name="phone" placeholder="Phone Number" type="text" /></td>
+    <td><button type="submit" class="btn btn-raised btn-success">Add</button></td>
 </form>
+</table>
 
 {% endblock %}

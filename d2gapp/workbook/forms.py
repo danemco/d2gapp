@@ -1,5 +1,5 @@
 from django import forms
-from .models import Assignment, PersonProgress, OFFICE
+from .models import Assignment, PersonProgress, OFFICE, ProfileNotify
 
 class AssignmentForm(forms.ModelForm):
 
@@ -23,4 +23,11 @@ class ProfileLoginForm(forms.Form):
     phone = forms.CharField()
     last_name = forms.CharField()
 
-
+class ProfileNotifyForm(forms.ModelForm):
+    class Meta:
+        model = ProfileNotify
+        fields = ['phone', 'name']
+        widgets = {
+                    'phone': forms.TextInput(attrs={"placeholder": "Phone Number"}),
+                    'name': forms.TextInput(attrs={"placeholder": "Name"}),
+                }
