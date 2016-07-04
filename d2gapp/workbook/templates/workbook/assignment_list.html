@@ -1,9 +1,31 @@
 {% extends 'base.html' %}
+{% load workbook_tags %}
 
 {% block content %}
-{% for assignment in assignment_list %}
-<a href="{% url 'assignment_create' assignment.id %}" class="btn btn-default btn-lg btn-block btn-raised">{{ assignment.title }}</a>
-{% empty %}
-  There are no assignments.
+
+{% regroup assignment_list by office as assignments %}
+
+{% for office in assignments %}
+<h2>
+    {% if office.grouper == 'd' %}
+    Deacon Activities
+    {% elif office.grouper == 't' %}
+    Teacher Activities
+    {% elif office.grouper == 'p' %}
+    Priest Activities
+    {% endif %}
+<h2>
+        {% for assignment in office.list %}
+            {% if assignment in profile_assignment_completed %}
+                <a href="{% url 'assignment_update' assignment.id %}" class="btn btn-info btn-lg btn-block btn-raised">{{ assignment.title }}
+                <i class="material-icons">assignment_turned_in</i>
+                </a>
+            {% else %}
+                <a href="{% url 'assignment_create' assignment.id %}" class="btn btn-default btn-lg btn-block btn-raised">{{ assignment.title }}
+                </a>
+            {% endif %}
+        {% empty %}
+          There are no activities defined yet.
+        {% endfor %}
 {% endfor %}
 {% endblock %}

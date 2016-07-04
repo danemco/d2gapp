@@ -37,8 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
     'workbook',
+    'django_twilio',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -130,3 +130,5 @@ SITE_ID = 1
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
 STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
+
+SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'

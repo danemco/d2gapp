@@ -6,7 +6,7 @@ def profile_required(function):
     # Not quite sure what I'm doing
     def decorator(request, *args, **kwargs):
         # If we have a profile ID set in the profile, just return the function
-        if request.session.get('profile_id', None):
+        if request.session.get('profile', None):
             return function(request, *args, **kwargs)
         # Otherwise, redirect to a view that gets the profile
         path = request.get_full_path()

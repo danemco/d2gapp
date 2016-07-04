@@ -26,9 +26,13 @@ class Assignment(models.Model):
     act2 = models.TextField(blank = True, null = True)
     share = models.TextField()
     share_has_textarea = models.BooleanField(default = False)
+    ordering = models.IntegerField(blank = True, null = True)
 
     def __unicode__(self):
         return self.title
+
+    class Meta:
+        ordering = ['ordering']
 
 class Profile(models.Model):
     first_name = models.CharField(max_length=25)
@@ -67,5 +71,6 @@ class PersonProgress(models.Model):
 
     class Meta:
         verbose_name_plural = 'person progress records'
+        unique_together = ('profile', 'assignment')
     
     

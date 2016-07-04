@@ -10,6 +10,7 @@ from django.http.response import HttpResponseRedirect
 
 from .models import Assignment, PersonProgress, Profile, ProfileNotify
 from .forms import AssignmentForm, ProfileLoginForm, ProfileNotifyForm
+from .utils import notify_completed_assignment
 
 # Create your views here.
 class AjaxableResponseMixin(object):
@@ -38,6 +39,34 @@ class AjaxableResponseMixin(object):
 class AssignmentListView(ListView):
     model = Assignment
 
+    def get_queryset(self):
+        """
+        Show only assignments for the specific office.
+        """
+        queryset = super(AssignmentListView, self).get_queryset()
+        p = self.request.session.get('profile')
+        
+        if (p.office != '-'):
+            return queryset.filter(office = p.office)
+        else:
+            return queryset
+
+    def get_context_data(self, **kwargs):
+        """
+        Add the list of completed assignments to the list
+        """
+        context = super(AssignmentListView, self).get_context_data(**kwargs)
+
+        p = self.request.session.get('profile')
+        profile_assignment_completed = []
+
+        for pp in p.personprogress_set.all():
+            profile_assignment_completed.append(pp.assignment)
+
+        context['profile_assignment_completed'] = profile_assignment_completed
+
+        return context
+
 class AssignmentDetailView(DetailView):
     model = Assignment
 
@@ -58,10 +87,51 @@ class CompleteAssignmentView(CreateView):
 
     def get_initial(self):
         init_data = {}
-        init_data['profile'] = get_object_or_404(Profile, user = self.request.user)
+        init_data['profile'] = self.request.session['profile']
         init_data['assignment'] = get_object_or_404(Assignment, pk = self.kwargs.get('assignment', None))
         return init_data
 
+    def form_valid(self, form):
+        retval = super(CompleteAssignmentView, self).form_valid(form)
+
+        profile = self.request.session['profile']
+        notify_completed_assignment(profile, self.object)
+        messages.add_message(self.request, messages.SUCCESS, "Activity Complete: %s" % self.object.assignment)
+
+        return retval
+
+class UpdateAssignmentView(UpdateView):
+    model = PersonProgress
+    form_class = AssignmentForm
+    success_url = reverse_lazy('assignment_list')
+
+    def get_object(self):
+        assignment = self.kwargs.get('assignment', None)
+        profile    = self.request.session['profile']
+
+        obj = get_object_or_404(PersonProgress, assignment = assignment, profile = profile)
+
+        return obj
+
+    def get_form_kwargs(self):
+        kwargs = super(UpdateAssignmentView, self).get_form_kwargs()
+        kwargs['assignment'] = get_object_or_404(Assignment, pk = self.kwargs.get('assignment', None))
+        return kwargs
+
+    def get_context_data(self, **kwargs):
+        context = super(UpdateAssignmentView, self).get_context_data(**kwargs)
+        context['assignment'] = get_object_or_404(Assignment, pk = self.kwargs.get('assignment', None))
+        return context
+
+    def form_valid(self, form):
+        """
+        Set the message saying that the activity has been updated.
+        """
+        retval = super(UpdateAssignmentView, self).form_valid(form)
+        messages.add_message(self.request, messages.SUCCESS, "Activity Updated: %s" % self.object.assignment)
+        return retval
+
+    
 class RegisterProfileView(CreateView):
     success_url = reverse_lazy('assignment_list')
     model = Profile
@@ -70,7 +140,7 @@ class RegisterProfileView(CreateView):
     def form_valid(self, form):
         retval = super(RegisterProfileView, self).form_valid(form)
 
-        self.request.session['profile_id'] = self.object
+        self.request.session['profile'] = self.object
         messages.add_message(self.request, messages.SUCCESS, "Profile successfully created!")
 
         return retval
@@ -82,7 +152,7 @@ class UpdateProfileView(UpdateView):
 
     def get_object(self, queryset=None):
         try:
-            p = Profile.objects.get(pk=self.request.session.get('profile_id'))
+            p = self.request.session.get('profile')
         except ObjectDoesNotExist:
             raise Http404("No profile found. Try logging in or creating one.") 
         return p
@@ -97,11 +167,7 @@ class ProfileDetailView(TemplateView):
     
     def get_context_data(self):
         context = super(ProfileDetailView, self).get_context_data()
-        pid = self.request.session.get('profile_id')
-        try:
-            context['profile'] = Profile.objects.get(pk=pid)
-        except ObjectDoesNotExist:
-            raise Http404("No profile found. Try logging in or creating one.") 
+        context['profile'] = self.request.session.get('profile')
 
         return context
 
@@ -122,7 +188,7 @@ class ProfileLoginView(FormView):
             messages.add_message(self.request, messages.ERROR, "Invalid login. Try again.")
             return HttpResponseRedirect(reverse('profile_login'))
 
-        self.request.session['profile_id'] = p.id
+        self.request.session['profile'] = p
 
         messages.add_message(self.request, messages.SUCCESS, "Login successful. Welcome back!")
         return super(ProfileLoginView, self).form_valid(form)
@@ -132,7 +198,7 @@ class ProfileLogoutView(TemplateView):
 
     def get(self, request, *args, **kwargs):
         try:
-            del request.session['profile_id']
+            del request.session['profile']
         except KeyError:
             pass
 
@@ -145,8 +211,7 @@ class ProfileNotifyAdd(AjaxableResponseMixin, CreateView):
 
     def form_valid(self, form):
         try:
-            pid = self.request.session.get('profile_id')
-            p = Profile.objects.get(pk=pid)
+            p = self.request.session.get('profile')
         except ObjectDoesNotExist:
             raise Http404("No profile found. Try logging in or creating one.") 
         form.instance.profile = p
