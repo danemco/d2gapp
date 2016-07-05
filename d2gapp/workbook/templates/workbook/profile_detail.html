@@ -41,7 +41,7 @@
 {% empty %}
 <tr>
     <td colspan="2">
-        <p>You don't have any people set to receive a notification for completed assignments.</p>
+        <p>You don't have any people set to receive a notification for completed assignments. <a href="{% url 'profile_update' %}">Add someone now.</a></p>
     </td>
 </tr>
 {% endfor %}

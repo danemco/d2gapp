@@ -2,6 +2,10 @@ To Do
 =====
 
 * Log In page needs a Register / Create Profile link
-* Need to verify SMS numbers
+* Need to verify SMS numbers (Opt In)
 * Report for leaders to view progress of their members
 * Forms need to be styled to look better. Possibly override the form init to do it right
+* Activity form to be formatted better for desktop
+* Add / Remove People To Notify to have better layout on mobile
+* First login: take them to the Profile Update page so that they can add people to receive notifications
+* Add button on notify (profile update) needs to be aligned better
