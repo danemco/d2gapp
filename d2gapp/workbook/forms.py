@@ -28,6 +28,6 @@ class ProfileNotifyForm(forms.ModelForm):
         model = ProfileNotify
         fields = ['phone', 'name']
         widgets = {
-                    'phone': forms.TextInput(attrs={"placeholder": "Phone Number"}),
-                    'name': forms.TextInput(attrs={"placeholder": "Name"}),
+                'phone': forms.TextInput(attrs={"placeholder": "Phone Number", 'class': 'form-control'}),
+                'name': forms.TextInput(attrs={"placeholder": "Name", 'class': 'form-control'}),
                 }

@@ -10,7 +10,7 @@ urlpatterns = [
         url(r'^activity/(?P<assignment>\d+)/update/$', profile_required(views.UpdateAssignmentView.as_view()), name="assignment_update"),
 
         # Profile-reltaed views
-        url(r'profile/create/$', profile_required(views.RegisterProfileView.as_view()), name="profile_create"),
+        url(r'profile/create/$', views.RegisterProfileView.as_view(), name="profile_create"),
         url(r'profile/update/$', profile_required(views.UpdateProfileView.as_view()), name="profile_update"),
         url(r'profile/login/$', views.ProfileLoginView.as_view(), name='profile_login'),
         url(r'profile/logout/$', views.ProfileLogoutView.as_view(), name='profile_logout'),

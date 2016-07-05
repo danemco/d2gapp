@@ -1,0 +1,7 @@
+To Do
+=====
+
+* Log In page needs a Register / Create Profile link
+* Need to verify SMS numbers
+* Report for leaders to view progress of their members
+* Forms need to be styled to look better. Possibly override the form init to do it right

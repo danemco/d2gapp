@@ -132,3 +132,5 @@ CRISPY_TEMPLATE_PACK = 'bootstrap3'
 STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
+
+DEFAULT_FROM_SMS = "4352151054"
