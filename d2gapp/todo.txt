@@ -9,3 +9,5 @@ To Do
 * Add / Remove People To Notify to have better layout on mobile
 * First login: take them to the Profile Update page so that they can add people to receive notifications
 * Add button on notify (profile update) needs to be aligned better
+* Add "ordering" to be editable inline in change list for assignments
+* Suggest leaders and others for the ward for notification screen
