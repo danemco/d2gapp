@@ -223,3 +223,34 @@ class ProfileNotifyDelete(AjaxableResponseMixin, DeleteView):
     model = ProfileNotify
     success_url = reverse_lazy('profile_detail')
 
+class LeaderReportView(TemplateView):
+    template_name = "workbook/leader_view.html"
+
+    def get_context_data(self, **kwargs):
+        """
+        Get a list of people that report to this person
+        """
+        context = super(LeaderReportView, self).get_context_data(**kwargs)
+
+        context["assignment_list"] = Assignment.objects.all()
+
+        # Get a list of profiles that report to the logged in user
+        try:
+            user_profile = self.request.session.get('profile')
+        except ObjectDoesNotExist:
+            raise Http404("No profile found. Try logging in or creating one.") 
+
+
+        reporting_profiles = []
+        for pn in ProfileNotify.objects.filter(phone = user_profile.phone):
+            reporting_profiles.append(pn.profile)
+
+        # Sort by last name
+        reporting_profiles.sort(key=lambda x: (x.office, x.last_name))
+
+        context["reporting_profile_list"] = reporting_profiles
+
+        return context
+
+
+

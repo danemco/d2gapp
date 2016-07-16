@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load workbook_tags %}
+
+{% block title %}Leader Report View{% endblock %}
+
+{% block content %}
+
+<h1>Progress Report</h1>
+
+<table class="table">
+    <!-- Fill out the table heading -->
+<tr>
+    <th>Name</th>
+    <th>Office</th>
+    {% for assignment in assignment_list %}
+    <th class="rotate assignment-{{assignment.section}}"><div><span>{{ assignment }}</span></div></th>
+    {% endfor %}
+</tr>
+
+{% for profile in reporting_profile_list %}
+<tr>
+    <td>{{ profile.last_name }}, {{ profile.first_name }}</td>
+    <td>{{ profile.get_office_display }}</td>
+    {% assignments_completed profile as assignments_completed_list %}
+    {% for assignment in assignment_list %}
+        <td>
+        {% if assignment in assignments_completed_list %}
+        X 
+        {% else %}
+        -
+        {% endif %}
+        </td>
+    {% endfor %}
+</tr>
+    {% empty %}
+    <p>No profile found that reports to you.</p>
+
+{% endfor %}
+</table>
+
+{% endblock %}
