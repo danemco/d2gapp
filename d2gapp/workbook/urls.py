@@ -19,6 +19,6 @@ urlpatterns = [
         url(r'^profile/notify/delete/(?P<pk>\d+)/$', profile_required(views.ProfileNotifyDelete.as_view()), name="profile_notify_delete"),
 
         # Leader-specific views
-        url(r'^leader-report/$', profile_required(views.LeaderReportView.as_view()),name="leader-report"),
+        url(r'^leader-report/$', profile_required(views.LeaderReportView.as_view()),name="leader_report"),
 
 ]

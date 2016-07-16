@@ -41,8 +41,9 @@
                            {% if request.session.profile %}
                            <li><a href="javascript:void(0)"><i>Welcome, {{ request.session.profile }}</i></a></li>
                            <li><a href="{% url 'profile_logout' %}">Log out</a></li> 
-                           <li><a href="{% url 'assignment_list' %}">Activities</a>
-                           <li><a href="{% url 'profile_detail' %}">Profile Settings</a>
+                           <li><a href="{% url 'assignment_list' %}">Activities</a></li>
+                           <li><a href="{% url 'leader_report' %}">Leader Report</a></li>
+                           <li><a href="{% url 'profile_detail' %}">Profile Settings</a></li>
                            {% else %}
                            <li><a href="{% url 'profile_login' %}">Log in</a></li> 
                            <li><a href="{% url 'profile_create' %}">Register</a></li> 
