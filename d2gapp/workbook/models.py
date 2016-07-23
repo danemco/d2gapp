@@ -26,6 +26,7 @@ class Assignment(models.Model):
     act2 = models.TextField(blank = True, null = True)
     share = models.TextField()
     share_has_textarea = models.BooleanField(default = False)
+    footnote = models.TextField(blank = True, null = True)
     ordering = models.IntegerField(blank = True, null = True)
 
     def __unicode__(self):
