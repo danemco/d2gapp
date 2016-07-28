@@ -12,7 +12,7 @@ OFFICE = (
 SECTION = (
     ('ss', 'Spiritual Strength'),
     ('pd', 'Priesthood Duties'),
-    ('ftsoy', 'For The Strenght Of Youth'),
+    ('ftsoy', 'For The Strength Of Youth'),
     ('mp', 'Preparing To Receive the Melchizedek Priesthood'),
 )
 
