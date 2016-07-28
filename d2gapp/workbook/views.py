@@ -162,6 +162,14 @@ class UpdateProfileView(UpdateView):
         context['form2'] = ProfileNotifyForm
         return context
 
+    def form_valid(self, form):
+        retval = super(UpdateProfileView, self).form_valid(form)
+
+        self.request.session['profile'] = self.object
+        messages.add_message(self.request, messages.SUCCESS, "Profile updated successfully!")
+
+        return retval
+
 class ProfileDetailView(TemplateView):
     template_name = 'workbook/profile_detail.html'
     
