@@ -38,6 +38,6 @@
 
 {% if assignment.footnote %}
 <h4>Additional Information</h4>
-{{ assignment.footnote }}
+{{ assignment.footnote|safe }}
 {% endif %}
 {% endblock %}
