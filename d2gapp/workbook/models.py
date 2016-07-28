@@ -5,7 +5,7 @@ from django.db import models
 OFFICE = (
     ('d', 'Deacon'),
     ('t', 'Teacher'),
-    ('p', 'Priest'),
+    ('z', 'Priest'),
     ('-', 'Leader, Bishop, or Advisor'),
 )
 
