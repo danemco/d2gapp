@@ -24,6 +24,7 @@ class Assignment(models.Model):
     learn = models.TextField()
     act1 = models.TextField()
     act2 = models.TextField(blank = True, null = True)
+    act3 = models.TextField(blank = True, null = True)
     share = models.TextField()
     share_has_textarea = models.BooleanField(default = False)
     footnote = models.TextField(blank = True, null = True)
@@ -33,7 +34,7 @@ class Assignment(models.Model):
         return self.title
 
     class Meta:
-        ordering = ['ordering']
+        ordering = ['office', 'ordering']
 
 class Profile(models.Model):
     first_name = models.CharField(max_length=25)
@@ -63,6 +64,7 @@ class PersonProgress(models.Model):
     assignment = models.ForeignKey(Assignment)
     act1 = models.TextField()
     act2 = models.TextField(blank = True, null = True)
+    act3 = models.TextField(blank = True, null = True)
     share = models.TextField(blank = True, null = True)
     date_completed = models.DateTimeField(auto_now_add = True)
     shared_with = models.CharField(max_length=30, blank = True, null = True)

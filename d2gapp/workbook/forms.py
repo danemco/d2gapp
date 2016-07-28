@@ -5,7 +5,7 @@ class AssignmentForm(forms.ModelForm):
 
     class Meta:
         model = PersonProgress
-        fields = ['profile', 'assignment', 'act1', 'act2', 'share']
+        fields = ['profile', 'assignment', 'act1', 'act2', 'act3', 'share']
         widgets = {
                 'profile': forms.HiddenInput(),
                 'assignment': forms.HiddenInput(),
@@ -15,6 +15,9 @@ class AssignmentForm(forms.ModelForm):
         super(AssignmentForm, self).__init__(*args, **kwargs)
         if not assignment.act2:
             self.fields['act2'].widget = forms.HiddenInput()
+        
+        if not assignment.act3:
+            self.fields['act3'].widget = forms.HiddenInput()
         
         if not assignment.share_has_textarea:
             self.fields['share'].widget = forms.HiddenInput()

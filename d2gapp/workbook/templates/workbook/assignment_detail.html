@@ -14,6 +14,11 @@
 <textarea class="form-control" rows=4>
 </textarea>
 {% endif %}
+{% if assignmetn.act3 %}
+{{ assignment.act3|safe }}
+<textarea class="form-control" rows=4>
+</textarea>
+{% endif %}
 <h2>Share</h2>
 {{ assignment.share|safe }}
 {% if assignment.share_has_textarea %}

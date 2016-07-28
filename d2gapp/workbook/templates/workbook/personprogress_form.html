@@ -17,6 +17,11 @@
     {{ form.act2.errors }}
     {{ form.act2 }}
     {% endif %}
+    {% if assignment.act3 %}
+        {{ assignment.act3|safe }}
+    {{ form.act3.errors }}
+    {{ form.act3 }}
+    {% endif %}
 <h2>Share</h2>
 {{ assignment.share|safe }}
 {% if assignment.share_has_textarea %}
