@@ -6,7 +6,7 @@ OFFICE = (
     ('d', 'Deacon'),
     ('t', 'Teacher'),
     ('z', 'Priest'),
-    ('-', 'Leader, Bishop, or Advisor'),
+    ('-', 'Advisor, Bishop, or Parent'),
 )
 
 SECTION = (
