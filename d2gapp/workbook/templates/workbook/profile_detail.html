@@ -4,6 +4,7 @@
 
 
 {% block content %}
+<h1>Your Profile Settings</h1>
 <table class="table">
     <tr>
         <td>Name</td>
@@ -28,6 +29,7 @@
 </table>
 
 <h3>Notification List</h3>
+<p>Tap the <a href="{% url 'profile_update' %}">Update Profile</a> button to add or remove people from automatically receiving notifications when you complete an activity.</p>
 <table class="table">
     <tr>
         <th>Name</th>
@@ -47,5 +49,5 @@
 {% endfor %}
 </table>
 
-<a href="{% url 'profile_update' %}" class="btn btn-raised">Update Profile</a>
+<a href="{% url 'profile_update' %}" class="btn btn-raised btn-primary">Update Profile</a>
 {% endblock %}

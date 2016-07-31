@@ -142,6 +142,7 @@ class RegisterProfileView(CreateView):
 
         self.request.session['profile'] = self.object
         messages.add_message(self.request, messages.SUCCESS, "Profile successfully created!")
+        messages.add_message(self.request, messages.ERROR, '<i class="material-icons">priority_high</i> To notify others of completed activities, add people to your notification list in your <a href="/profile/update/#notification-list-area"><i class="material-icons">account_box</i> profile settings</a>.')
 
         return retval
 
@@ -184,7 +185,7 @@ class ProfileLoginView(FormView):
     form_class = ProfileLoginForm
 
     def get_success_url(self):
-        return self.request.GET.get('next', '/')
+        return self.request.GET.get('next', reverse_lazy('assignment_list'))
 
     def form_valid(self, form):
         phone = form.cleaned_data['phone']

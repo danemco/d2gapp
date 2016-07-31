@@ -2,11 +2,11 @@
 {% load workbook_tags %}
 
 {% block content %}
-
+<div class="well">
 {% regroup assignment_list by office as assignments %}
 
 {% for office in assignments %}
-<h2>
+<h1>
     {% if office.grouper == 'd' %}
     Deacon Activities
     {% elif office.grouper == 't' %}
@@ -14,18 +14,46 @@
     {% elif office.grouper == 'z' %}
     Priest Activities
     {% endif %}
-<h2>
+</h1>
+    <div class="row">
+        <div class="col-xs-9">
+            <p class="lead">Activity</p>
+        </div>
+        <div class="col-xs-2 text-center">
+            <p class="lead">Complete?</p>
+        </div>
+        <div class="col-xs-1">
+        </div>
+    </div>
         {% for assignment in office.list %}
             {% if assignment in profile_assignment_completed %}
-                <a href="{% url 'assignment_update' assignment.id %}" class="btn btn-info btn-lg btn-block btn-raised">{{ assignment.title }}
-                <i class="material-icons">assignment_turned_in</i>
-                </a>
+            <div class="row  activity-row activity-success">
+                <div class="col-xs-9">
+                    <a href="{% url 'assignment_update' assignment.id %}">{{ assignment.title }}</a>
+                </div>
+                <div class="col-xs-2 text-center">
+                    <i class="material-icons">assignment_turned_in</i>
+                </div>
+                <div class="col-xs-1">
+                </div>
+            </div>
             {% else %}
-                <a href="{% url 'assignment_create' assignment.id %}" class="btn btn-default btn-lg btn-block btn-raised">{{ assignment.title }}
-                </a>
+            <div class="row activity-row activity-{{ assignment.section }}">
+                <div class="col-xs-9">
+                        <a href="{% url 'assignment_create' assignment.id %}">{{ assignment.title }}</a>
+                </div>
+                <div class="col-xs-2">
+                </div>
+                <div class="col-xs-1">
+                </div>
+            </div>
             {% endif %}
+            </tr>
         {% empty %}
           There are no activities defined yet.
         {% endfor %}
+        </tbody>
+    </table>
 {% endfor %}
+</div>
 {% endblock %}

@@ -18,7 +18,7 @@ SECTION = (
 
 # Create your models here.
 class Assignment(models.Model):
-    office = models.CharField(max_length = 2, choices = OFFICE, default='d')
+    office = models.CharField(max_length = 2, choices = OFFICE, default='d', verbose_name="priesthood office")
     section = models.CharField(max_length = 5, choices = SECTION, default='ss')
     title = models.CharField(max_length = 200)
     learn = models.TextField()
@@ -39,8 +39,8 @@ class Assignment(models.Model):
 class Profile(models.Model):
     first_name = models.CharField(max_length=25)
     last_name = models.CharField(max_length=25)
-    office = models.CharField(max_length = 2, choices = OFFICE)
-    phone = models.CharField("phone number", max_length = 10, help_text="Phone number for identifying your account")
+    office = models.CharField(max_length = 2, choices = OFFICE, verbose_name="priesthood office")
+    phone = models.CharField("phone number", max_length = 10, help_text="Use your full 10 digit phone number for receiving text messages", blank = True, null =  True)
     receive_text_messages = models.BooleanField(default=True)
     ward = models.CharField("ward or branch", max_length = 50, blank = True, null = True)
 
@@ -58,6 +58,10 @@ class ProfileNotify(models.Model):
 
     def __unicode__(self):
         return "%s - %s (%s)" % (self.profile, self.name, self.phone)
+
+    class Meta:
+        verbose_name_plural = 'profile notifications'
+        verbose_name = 'profile notification'
 
 class PersonProgress(models.Model):
     profile = models.ForeignKey(Profile)

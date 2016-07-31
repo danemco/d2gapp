@@ -34,19 +34,19 @@
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
                         </button>
-                        <a class="navbar-brand" href="/">Duty To God App</a>
+                        <a class="navbar-brand" href="{% url 'assignment_list' %}">Duty To God App</a>
                     </div>
                     <div class="navbar-collapse collapse navbar-responsive-collapse">
                         <ul class="nav navbar-nav">
                            {% if request.session.profile %}
                            <li><a href="javascript:void(0)"><i>Welcome, {{ request.session.profile }}</i></a></li>
-                           <li><a href="{% url 'profile_logout' %}">Log out</a></li> 
-                           <li><a href="{% url 'assignment_list' %}">Activities</a></li>
-                           <li><a href="{% url 'leader_report' %}">Leader Report</a></li>
-                           <li><a href="{% url 'profile_detail' %}">Profile Settings</a></li>
+                           <li><a href="{% url 'assignment_list' %}"><i class="material-icons">directions_walk</i> Activities</a></li>
+                           <li><a href="{% url 'leader_report' %}"><i class="material-icons">playlist_add_check</i> Leader Report</a></li>
+                           <li><a href="{% url 'profile_detail' %}"><i class="material-icons">account_box</i> Profile Settings</a></li>
+                           <li><a href="{% url 'profile_logout' %}"><i class="material-icons">power_settings_new</i> Log out</a></li> 
                            {% else %}
-                           <li><a href="{% url 'profile_login' %}">Log in</a></li> 
-                           <li><a href="{% url 'profile_create' %}">Register</a></li> 
+                           <li><a href="{% url 'profile_login' %}"><i class="material-icons">add</i> Log in</a></li> 
+                           <li><a href="{% url 'profile_create' %}"><i class="material-icons">account_box</i> Register</a></li> 
                            {% endif %}    
 
                         </ul>
@@ -57,11 +57,12 @@
 
 
 
-            <div>
+            <div class="row">
+            <div class="col-md-12">
                 {% block messages %}
                  {% if messages %}
                       {% for message in messages %}
-                      <div class="alert alert-{% if message.tags == "error"%}danger{% else %}success{% endif %}"><p>{{ message }}</p></div>
+                      <div class="alert alert-{% if message.tags == "error"%}danger{% else %}success{% endif %}"><p>{{ message|safe }}</p></div>
                       {% endfor %}
                   {% endif %}
                 {% endblock %}
@@ -69,7 +70,12 @@
 blah blah blah
 {% endblock %}
             </div>
+            </div>
         </div>
+    </div>
+        <hr>
+    <div class="row text-center">
+        <p id="disclaimer">Copyright &copy; {% now "Y" %}. Disclaimer: This app is not affiliated with The Church of Jesus Christ of Latter-day Saints.</p>
     </div>
 </div>
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
@@ -80,5 +86,7 @@ blah blah blah
     $.material.init();
   });
 </script>
+{% block footerscripts %}
+{% endblock %}
 </body>
 </html>

@@ -1,3 +1,75 @@
+#disclaimer {
+  font-style: italic;
+}
+
+.id_name, .id_phone {
+    margin: 10px 1px;
+}
+
+#id_name, #id_phone {
+    margin: 10px 1px;
+}
+
+input.id_name, input.id_phone {
+    width: 125px;
+}
+
+.compact-button {
+    padding: 6px 12px;
+}
+
+.form-group {
+    margin: 0 0 0 0;
+}
+
+.activity-row {
+    font-size: 20px;
+    padding-top:  20px;
+    padding-bottom:  20px;
+}
+
+.activity-success {
+    background-color: #dff0d8;
+}
+
+.activity-ss {
+    background-color: #d9edf7;
+}
+.activity-pd {
+    background-color: #f2dede;
+}
+.activity-ftsoy {
+    background-color: #fcf8e3;
+}
+.activity-mp {
+    background-color: #eee;
+}
+
+#activity-form textarea {
+    margin-left: 15px;
+}
+
+label.control-label {
+    margin-top: 16px;
+    color: 333;
+    font-size: 16px;
+}
+
+.alert.alert-danger a {
+    text-decoration: underline;
+}
+
+.helptext {
+    font-size: 12px;
+    line-height: 1.4;
+    color: #bdbdbd;
+    font-weight:400;
+}
+
+label {
+    color: #333;
+}
+
 th.rotate {
   /* Something you can count on */
   height: 140px;

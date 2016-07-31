@@ -5,7 +5,7 @@ from .decorators import profile_required
 
 urlpatterns = [
         # Assignment-related views
-        url(r'^$', profile_required(views.AssignmentListView.as_view()), name="assignment_list"),
+        url(r'^profile-activity/$', profile_required(views.AssignmentListView.as_view()), name="assignment_list"),
         url(r'^activity/(?P<assignment>\d+)/complete/$', profile_required(views.CompleteAssignmentView.as_view()), name="assignment_create"),
         url(r'^activity/(?P<assignment>\d+)/update/$', profile_required(views.UpdateAssignmentView.as_view()), name="assignment_update"),
 

@@ -9,7 +9,7 @@ $(function () {
 
     $('.delnotify').submit(function(e) {
         e.preventDefault();
-        if (confirm("Are you sure you want to no longer auto-notify this person?")) {
+        if (confirm("Are you sure you want to no longer auto-notify this person of activity updates?")) {
             var myform = $(this)
             $.ajax({
                 type: 'post',
@@ -36,7 +36,7 @@ $(function () {
         <td>" + data["phone"] + "</td>   \
         <td><form class=\"delnotify\" action=\"/profile/notify/delete/" + data["id"] + "/\" method=\"post\">  \
                 {% csrf_token %}  \
-                <button type=\"submit\" class=\"btn btn-raised btn-danger delnotify\">x</button>    \
+                <button type=\"submit\" class=\"btn btn-raised btn-danger delnotify compact-button\">x</button>    \
             </form> \
         </td> \
     </tr> ");
@@ -46,25 +46,33 @@ $(function () {
             error: function() {},
         });
     });
+    });
 
 </script>
 {% endblock %}
 
 {% block content %}
-<h2>{% if object %}Update{% else %}Create{% endif %} Profile</h2>
-<form action="." method="post" class="form-horizontal">
+<h1>{% if object %}Update{% else %}Create{% endif %} Profile</h1>
+<form action="." method="post" class="form-horizontal" id="profile-form">
+<fieldset>
     {% csrf_token %}
-    <table class="table">
-    {{ form }}
-    </table>
-    <button type="submit">{% if object %}Update{% else %}Create{% endif %} Profile</button>
+    <div class="well">
+        <table class="table">
+        {{ form }}
+        </table>
+        <button type="submit" class="btn btn-raised btn-primary">{% if object %}Save Profile Changes{% else %}Create Profile{% endif %}</button>
+        <a href="{% url 'assignment_list' %}" class="btn btn-raised">Cancel</a>
+    </div>
+</fieldset>
 </form>
 
 {% if object %}
 <hr>
-<h3>Notification List</h3>
+<div class="well">
+<h3 id="notification-list-area">Notification List</h3>
 <p>List the people you would like to notify when you complete an assignment. Examples could be parents, advisors, quorum presidents, and Duty To God specialists.</p>
-<table class="table">
+<div class="table-responsive">
+<table class="table-condensed">
     <tr>
         <th>Name</th>
         <th>Phone Number</th>
@@ -72,11 +80,11 @@ $(function () {
     </tr>
 {% for person in profile.profilenotify_set.all %}
     <tr>
-        <td>{{ person.name }}</td>
-        <td>{{ person.phone }}</td>
+        <td><span class="id_name">{{ person.name }}</span></td>
+        <td><span class="id_phone">{{ person.phone }}</span></td>
         <td><form class="delnotify" action="{% url 'profile_notify_delete' person.id %}" method="post">
                 {% csrf_token %}
-                <button type="submit" class="btn btn-raised btn-danger delnotify">x</button>
+                <button type="submit" class="btn btn-raised btn-danger delnotify compact-button">x</button>
             </form>
         </td>
     </tr>
@@ -91,12 +99,31 @@ $(function () {
 <tr>
 <form action="{% url 'profile_notify_add' %}" method="post" id="addnotify">
     {% csrf_token %}
-    <td><input id="id_name" maxlength="50" name="name" placeholder="Name" type="text" /></td>
-    <td><input id="id_phone" maxlength="10" name="phone" placeholder="Phone Number" type="text" /></td>
+    <td><input class="id_name" maxlength="50" name="name" placeholder="Name" type="text" /></td>
+    <td><input class="id_phone" maxlength="10" name="phone" placeholder="Phone Number" type="text" /></td>
     <td><button type="submit" class="btn btn-raised btn-success">Add</button></td>
 </form>
 </tr>
 </table>
+</div>
+</div>
 {% endif %}
 
+{% endblock %}
+
+{% block footerscripts %}
+<script>
+$('#id_phone, .id_phone').keyup(function () {
+    //to allow decimals,use/[^0-9\.]/g 
+    var regex = new RegExp(/[^0-9]/g);
+    var containsNonNumeric = this.value.match(regex);
+    if (containsNonNumeric)
+        this.value = this.value.replace(regex, '');
+});
+
+ $('#profile-form input').addClass( "form-control" );
+ $('#profile-form select').addClass( "form-control" );
+ $('#profile-form input:checkbox').removeClass( "form-control" ).addClass( "checkbox" );
+ $('#profile-form label').addClass( "control-label" );
+</script>
 {% endblock %}
