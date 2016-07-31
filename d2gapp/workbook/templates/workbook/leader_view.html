@@ -7,6 +7,12 @@
 
 <h1>Progress Report</h1>
 
+<div class="well">
+
+{% if  reporting_profile_list|length %}
+    <div style="min-height: 150px">
+    <!-- give room -->
+    </div>
 <table class="table">
     <!-- Fill out the table heading -->
 <tr>
@@ -32,10 +38,17 @@
         </td>
     {% endfor %}
 </tr>
-    {% empty %}
-    <p>No profile found that reports to you.</p>
 
 {% endfor %}
 </table>
+
+{% else %}
+<h3>Nothing Here</h3>
+    <p>It appears no individual has you in their noticiation list. There is nothing to report.</p>
+    <p>You can ask others to add your phone number to their notification list under their Profile Settings.</p>
+
+{% endif %}
+
+</div>
 
 {% endblock %}
