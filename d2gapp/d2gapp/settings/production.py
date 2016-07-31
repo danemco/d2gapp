@@ -4,6 +4,8 @@ import dj_database_url
 
 ALLOWED_HOSTS = [
             '.herokuapp.com',
+            '.dutytogodapp.org',
+            '.d2gapp.com',
         ]
 
 DEBUG = False
