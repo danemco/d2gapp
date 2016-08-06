@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ profile.full_name }}'s Progress Record{% endblock %}
+
+{% block content %}
+<h1>Progress Report for {{ profile.full_name }}</h1>
+<div class="well">
+
+    {% for pr in profile.personprogress_set.all %}
+    <h3>{{ pr.assignment }} ({{ pr.assignment.get_section_display }} / {{ pr.assignment.get_office_display }})</h3>
+        <i>Completed on {{ pr.date_completed }}</i>
+        <br>
+        <br>
+        <div class="well">
+        {% if pr.act1 %}
+            <p><b>Act: {{ pr.assignment.act1|safe }}</b></p>
+            <p><i>Response: </i>{{ pr.act1 }}</p>
+        {% endif %}
+
+        {% if pr.act2 %}
+        <p><b>Act: {{ pr.assignment.act2|safe }}</b></p>
+        <p><i>Response: </i>{{ pr.act2 }}</p>
+        {% endif %}
+
+
+        {% if pr.act3 %}
+        <p><b>Act: {{ pr.assignment.act3|safe }}</b></p>
+        <p><i>Response: </i>{{ pr.act3 }}</p>
+        {% endif %}
+
+        {% if pr.share %}
+        <p><b>Share: {{ pr.assignment.share|safe }}</b></p>
+        <p><i>Response: </i>{{ pr.share }}</p>
+        {% endif %}
+        </div>
+
+        {% if not forloop.last %}
+        <hr>
+        {% endif %}
+    {% empty %}
+        <i>No progress records for this individual have been found.</i>
+    {% endfor %}
+
+    <a href="{% url 'leader_report' %}" class="btn btn-raised btn-primary">Back To Reports</a>
+
+</div>
+{% endblock %}

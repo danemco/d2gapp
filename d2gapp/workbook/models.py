@@ -47,6 +47,9 @@ class Profile(models.Model):
     def __unicode__(self):
         return "%s %s" % (self.first_name, self.last_name)
 
+    def full_name(self):
+        return "%s %s" % (self.first_name, self.last_name)
+
 class ProfileNotify(models.Model):
     """
     This model collects the names and phone numbers of those that the young man wishes to 
@@ -79,5 +82,6 @@ class PersonProgress(models.Model):
     class Meta:
         verbose_name_plural = 'person progress records'
         unique_together = ('profile', 'assignment')
+        ordering = ['date_completed']
     
     

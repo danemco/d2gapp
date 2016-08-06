@@ -261,5 +261,26 @@ class LeaderReportView(TemplateView):
 
         return context
 
+class LeaderDetailView(DetailView):
+    model = Profile
+    template_name = 'workbook/leader_profile_detail.html'
 
+    # Override get_object to ensure that the current logged in profile has permission to view this person's profile
+    def get_object(self, queryset=None):
+        obj = super(LeaderDetailView, self).get_object(queryset)
+
+        try:
+            user_profile = self.request.session.get('profile')
+        except ObjectDoesNotExist:
+            raise Http404("No profile found. Try logging in or creating one.") 
+
+
+        reporting_profiles = []
+        for pn in ProfileNotify.objects.filter(phone = user_profile.phone):
+            reporting_profiles.append(pn.profile)
+
+        if obj not in reporting_profiles:
+            raise Http404("You don't have permission to view this person's profile information.")
+
+        return obj
 

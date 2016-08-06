@@ -20,5 +20,6 @@ urlpatterns = [
 
         # Leader-specific views
         url(r'^leader-report/$', profile_required(views.LeaderReportView.as_view()),name="leader_report"),
+        url(r'^leader-report/detail/(?P<pk>\d+)/$', profile_required(views.LeaderDetailView.as_view()),name="leader_detail"),
 
 ]

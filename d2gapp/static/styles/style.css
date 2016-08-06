@@ -2,6 +2,10 @@
   font-style: italic;
 }
 
+.no-border-top {
+    border-top: 0px solid #ddd;
+}
+
 .id_name, .id_phone {
     margin: 10px 1px;
 }
