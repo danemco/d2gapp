@@ -23,7 +23,7 @@ class AssignmentForm(forms.ModelForm):
             self.fields['share'].widget = forms.HiddenInput()
 
 class ProfileLoginForm(forms.Form):
-    phone = forms.CharField(help_text="Use your 10 digit phone number without dashes or parenthesis.")
+    phone = forms.CharField(help_text="Use your 10 digit phone number without dashes or parenthesis.", max_length=10)
     last_name = forms.CharField()
 
 class ProfileNotifyForm(forms.ModelForm):
