@@ -10,7 +10,19 @@ $(function () {
     $('.delnotify').submit(function(e) {
         e.preventDefault();
         if (confirm("Are you sure you want to no longer auto-notify this person of activity updates?")) {
-            var myform = $(this)
+            var myform = $(this);
+
+            // Update list of key people to update
+            var name_to_be_removed = myform.parent().prev().prev().text();
+            for (var i = 0; i < notif_list.length; i++)
+            {
+                if (notif_list[i] == name_to_be_removed) {
+                    notif_list.splice(i, 1);
+                    break;
+                }
+            }
+            updateNotifList();
+
             $.ajax({
                 type: 'post',
                 url: $(this).attr('action'),
@@ -25,12 +37,20 @@ $(function () {
 
     $('#addnotify').submit(function(e) {
         e.preventDefault();
-        var myform = $(this)
+        if ($('#recipient-type').val() == "-")
+        {
+            alert('Choose an option from the dropdown menu.');
+            return false;
+        }
+        $('#myModal').modal('hide');
+        var myform = $(this);
         $.ajax({
             type: 'post',
             url: $(this).attr('action'),
             success: function(data) {
-                myform.parent().before(" \
+                notif_list.push(data["name"]);
+                updateNotifList();
+                $('#last-row').parent().before(" \
     <tr>                                 \
         <td>" + data["name"] + "</td>    \
         <td>" + data["phone"] + "</td>   \
@@ -70,7 +90,11 @@ $(function () {
 <hr>
 <div class="well">
 <h3 id="notification-list-area">Notification List</h3>
-<p>List the people you would like to notify when you complete an assignment. Examples could be parents, advisors, quorum presidents, and Duty To God specialists.</p>
+<p>Notify key people to automatically receive updates when you complete assignments.</p>
+
+<div id="notifylist1" class="pull-left" style="padding-right: 30px;">
+</div>
+
 <div class="table-responsive">
 <table class="table-condensed">
     <tr>
@@ -82,9 +106,9 @@ $(function () {
     <tr>
         <td><span class="id_name">{{ person.name }}</span></td>
         <td><span class="id_phone">{{ person.phone }}</span></td>
-        <td><form class="delnotify" action="{% url 'profile_notify_delete' person.id %}" method="post">
+        <td><form class="delnotify" action="{% url 'profile_notify_delete' person.id %}" method="post" id="delnotify{{forloop.counter}}">
                 {% csrf_token %}
-                <button type="submit" class="btn btn-raised btn-danger delnotify compact-button">x</button>
+                <button type="submit" class="btn btn-raised btn-danger delnotify compact-button">&times;</button>
             </form>
         </td>
     </tr>
@@ -97,15 +121,52 @@ $(function () {
 {% endfor %}
 <!-- Add another notify -->
 <tr>
-<form action="{% url 'profile_notify_add' %}" method="post" id="addnotify">
-    {% csrf_token %}
-    <td><input class="id_name" maxlength="50" name="name" placeholder="Name" type="text" /></td>
-    <td><input class="id_phone" maxlength="10" name="phone" placeholder="Phone Number" type="text" /></td>
-    <td><button type="submit" class="btn btn-raised btn-success">Add</button></td>
-</form>
+    <td id="last-row"></td>
+    <td></td>
+    <td></td>
+</tr>
 </tr>
 </table>
 </div>
+
+<button type="button" class="btn btn-primary btn-raised btn-lg" data-toggle="modal" data-target="#myModal">
+    Add Another
+</button>
+
+<div class="clearfix"></div>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">New Notification Recipient</h4>
+      </div>
+      <form action="{% url 'profile_notify_add' %}" method="post" id="addnotify">
+      <div class="modal-body">
+              {% csrf_token %}
+              <select id="recipient-type" name="recipient_type" class="form-control">
+                  <option value="-">-- SELECT ONE --</option>
+                  <option value="Quorum President">Quorum President / Assnt.</option>
+                  <option value="Advisor">Advisor</option>
+                  <option value="Parent">Parent</option>
+                  <option value="Bishop">Bishop</option>
+                  <option value="Other">Other</option>
+              </select>
+              <input class="id_name form-control" id="new-notifier-name" maxlength="50" name="name" placeholder="Contact Type" type="hidden"/>
+              <input class="id_phone form-control" id="new-notifier-phone" maxlength="10" name="phone" placeholder="Phone Number" type="text" />
+              <span class="helptext">10 digit phone number, no spaces or dashes.</span>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-raised btn-primary">Add Individual</button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
 </div>
 {% endif %}
 
@@ -113,6 +174,65 @@ $(function () {
 
 {% block footerscripts %}
 <script>
+
+var notif_list = [];
+
+
+{% for person in profile.profilenotify_set.all %}
+    notif_list.push('{{ person.name }}');
+{% endfor %}
+
+function updateNotifList() {
+    var text = "";
+    var not_done = {};
+    not_done["Bishop"] = 1;
+    not_done["Advisor"] = 1;
+    not_done["Parent"] = 1;
+    not_done["Quorum President"] = 1;
+
+    for (var i = 0; i < notif_list.length; i++)
+    {
+        if (notif_list[i] == "Bishop")
+        {
+            not_done["Bishop"] = 0;
+        }
+        if (notif_list[i] == "Advisor")
+        {
+            not_done["Advisor"] = 0;
+        }
+        if (notif_list[i] == "Parent")
+        {
+            not_done["Parent"] = 0;
+        }
+        if (notif_list[i] == "Quorum President")
+        {
+            not_done["Quorum President"] = 0;
+        }
+    }
+
+    text  = "<p>It's recommended you notify:</p>";
+    text += "<table class='table-condensed'>";
+    text += "<tr><td>";
+    text += not_done["Bishop"] == 1 ? "<i class='material-icons'>highlight_off</i>" : "<i class='material-icons'>done</i>";
+    text += "</td><td>Bishop</td></tr>";
+    text += "<tr><td>";
+    text += not_done["Advisor"] == 1 ? "<i class='material-icons'>highlight_off</i>" : "<i class='material-icons'>done</i>";
+    text += "</td><td>Advisor</td></tr>";
+    text += "<tr><td>";
+    text += not_done["Parent"] == 1 ? "<i class='material-icons'>highlight_off</i>" : "<i class='material-icons'>done</i>";
+    text += "</td><td>Parent</td></tr>";
+    text += "<tr><td>";
+    text += not_done["Quorum President"] == 1 ? "<i class='material-icons'>highlight_off</i>" : "<i class='material-icons'>done</i>";
+    text += "</td><td>Quorum President</td></tr>";
+    text += "</table>";
+    text += "<span class='helptext'><hr></span>";
+    text += "<span class='helptext'><i class='material-icons'>highlight_off</i>Not in list</span><br>";
+    text += "<span class='helptext'><i class='material-icons'>done</i>In list</span>";
+
+    $('#notifylist1').html(text);
+    
+}
+
 $('#id_phone, .id_phone').keyup(function () {
     //to allow decimals,use/[^0-9\.]/g 
     var regex = new RegExp(/[^0-9]/g);
@@ -121,9 +241,32 @@ $('#id_phone, .id_phone').keyup(function () {
         this.value = this.value.replace(regex, '');
 });
 
+$('#recipient-type').change(function() {
+    var recipient_type = $(this).val();
+
+    if (recipient_type == '-')
+    {
+        $('#new-notifier-name').val( "" ).attr("type", "hidden");
+    }
+    else if (recipient_type == 'Other')
+    {
+        $('#new-notifier-name').val( "" ).attr("placeholder", "Name").attr("type", "text");
+    }
+    else
+    {
+        $('#new-notifier-name').val( recipient_type ).attr("input", "hidden")
+    }
+
+});
+
  $('#profile-form input').addClass( "form-control" );
  $('#profile-form select').addClass( "form-control" );
  $('#profile-form input:checkbox').removeClass( "form-control" ).addClass( "checkbox" );
  $('#profile-form label').addClass( "control-label" );
+
+$(function() {
+    updateNotifList();
+});
+
 </script>
 {% endblock %}
