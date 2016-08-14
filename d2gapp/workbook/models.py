@@ -27,6 +27,7 @@ class Assignment(models.Model):
     act3 = models.TextField(blank = True, null = True)
     share = models.TextField()
     share_has_textarea = models.BooleanField(default = False)
+    review = models.BooleanField(default = False, verbose_name="is this assignment a review item")
     footnote = models.TextField(blank = True, null = True)
     ordering = models.IntegerField(blank = True, null = True)
 
@@ -74,7 +75,8 @@ class PersonProgress(models.Model):
     act3 = models.TextField(blank = True, null = True)
     share = models.TextField(blank = True, null = True)
     date_completed = models.DateTimeField(auto_now_add = True)
-    shared_with = models.CharField(max_length=30, blank = True, null = True)
+    shared_with = models.ForeignKey('ProfileNotify', blank=True, null=True)
+    reviewed_by = models.ForeignKey(Profile, blank=True, null=True, related_name='reviewed_list')
 
     def __unicode__(self):
         return "%s - %s" % (self.profile, self.assignment)

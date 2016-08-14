@@ -9,7 +9,7 @@ from django.forms.models import model_to_dict
 from django.http.response import HttpResponseRedirect
 
 from .models import Assignment, PersonProgress, Profile, ProfileNotify
-from .forms import AssignmentForm, ProfileLoginForm, ProfileNotifyForm
+from .forms import AssignmentForm, ProfileLoginForm, ProfileNotifyForm, ReviewSectionForm
 from .utils import notify_completed_assignment
 
 # Create your views here.
@@ -97,6 +97,37 @@ class CompleteAssignmentView(CreateView):
         profile = self.request.session['profile']
         notify_completed_assignment(profile, self.object)
         messages.add_message(self.request, messages.SUCCESS, "Activity Complete: %s" % self.object.assignment)
+
+        return retval
+
+class CompleteReviewAssignemtnView(FormView):
+    form_class = ReviewSectionForm
+    success_url = reverse_lazy('assignment_list')
+
+    def get_form_kwargs(self):
+        kwargs = super(CompleteReviewAssignmentView, self).get_form_kwargs()
+        kwargs['profile'] = self.request.session['profile']
+        kwargs['personprogress'] = self.request.session['profile']
+        return kwargs
+
+    def get_context_data(self, **kwargs):
+        context = super(CompleteReviewAssignmentView, self).get_context_data(**kwargs)
+        context['assignment'] = get_object_or_404(Assignment, pk = self.kwargs.get('assignment', None))
+        return context
+
+    def form_valid(self, form):
+        retval = super(CompleteReviewAssignmentView, self).form_valid(form)
+        pn = ProfileNotify.objects.get(pk = form.cleaned_data['review_by'])
+
+        pp = PersonProgress()
+        pp.profile = self.request.session['profile']
+        pp.assignment = get_object_or_404(Assignment, pk = self.kwargs.get('assignment', None))
+        pp.act1 = form.cleaned_data['my_signature']
+        pp.shared_with = pn
+        self.object = pp.save()
+
+        notify_review_assignment(pn, self.object)
+        messages.add_message(self.request, messages.SUCCESS, "Request for seview sent to %s" % pn.name)
 
         return retval
 
