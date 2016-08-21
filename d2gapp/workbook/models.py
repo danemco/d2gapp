@@ -77,6 +77,7 @@ class PersonProgress(models.Model):
     date_completed = models.DateTimeField(auto_now_add = True)
     shared_with = models.ForeignKey('ProfileNotify', blank=True, null=True)
     reviewed_by = models.ForeignKey(Profile, blank=True, null=True, related_name='reviewed_list')
+    review_completed = models.DateTimeField(blank = True, null = True)
 
     def __unicode__(self):
         return "%s - %s" % (self.profile, self.assignment)

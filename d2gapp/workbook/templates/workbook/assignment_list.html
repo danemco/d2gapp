@@ -29,7 +29,11 @@
             {% if assignment in profile_assignment_completed %}
             <div class="row  activity-row activity-success">
                 <div class="col-xs-9">
+                    {% if assignment.review %}
+                    <a href="#">{{ assignment.title }}</a>
+                    {% else %}
                     <a href="{% url 'assignment_update' assignment.id %}">{{ assignment.title }}</a>
+                    {% endif %}
                 </div>
                 <div class="col-xs-2 text-center">
                     <i class="material-icons">assignment_turned_in</i>
@@ -40,7 +44,11 @@
             {% else %}
             <div class="row activity-row activity-{{ assignment.section }}">
                 <div class="col-xs-9">
-                        <a href="{% url 'assignment_create' assignment.id %}">{{ assignment.title }}</a>
+                    {% if assignment.review %}
+                    <a href="{% url 'review_create' assignment.id %}">{{ assignment.title }}</a>
+                    {% else %}
+                    <a href="{% url 'assignment_create' assignment.id %}">{{ assignment.title }}</a>
+                    {% endif %}
                 </div>
                 <div class="col-xs-2">
                 </div>

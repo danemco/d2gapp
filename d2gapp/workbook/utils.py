@@ -19,5 +19,5 @@ def notify_review_assignment(profilenotify, personprogress):
     client = TwilioRestClient(os.environ['TWILIO_ACCOUNT_SID'], os.environ['TWILIO_AUTH_TOKEN'])
     m = client.messages.create(to='+1' + profilenotify.phone, 
             from_='+1' + getattr(settings, "DEFAULT_FROM_SMS", None),
-            body="D2G APP: %s has completed the secion, %s, and is requesting that you review his activities. Log in at dutytogodapp.org and review and sign off from Leader Reports." % (personprogress.profile, personprogress.assignment))
+            body="D2G APP: %s has completed the section, %s, and is requesting that you review his activities. Log in at dutytogodapp.org and review and sign off from Leader Reports." % (personprogress.profile, personprogress.assignment))
 

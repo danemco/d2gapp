@@ -11,6 +11,18 @@
         <i>Completed on {{ pr.date_completed }}</i>
         <br>
         <br>
+    {% if pr.assignment.review %}
+        <div class="well">
+            {% if not pr.reviewed_by %}
+            <form method="POST" action="{% url 'sign_personprogress' pr.id %}" class="sign-activity">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-raised btn-primary">Sign this review section</button>
+            </form>
+            {% else %}
+            <p><b>Review Completed</b> by {{ pr.reviewed_by }} at {{ pr.review_completed }}</p>
+            {% endif %}
+        </div>
+    {% else %}
         <div class="well">
         {% if pr.act1 %}
             <p><b>Act: {{ pr.assignment.act1|safe }}</b></p>
@@ -37,6 +49,7 @@
         {% if not forloop.last %}
         <hr>
         {% endif %}
+    {% endif %}
     {% empty %}
         <i>No progress records for this individual have been found.</i>
     {% endfor %}
@@ -44,4 +57,24 @@
     <a href="{% url 'leader_report' %}" class="btn btn-raised btn-primary">Back To Reports</a>
 
 </div>
+{% endblock %}
+
+{% block footerscripts %}
+<script>
+$('.sign-activity').submit(function (e) {
+    e.preventDefault();
+    var myform = $(this);
+
+    $.ajax({
+        type: 'post',
+        url: $(this).attr('action'),
+        success: function() {
+                $(":button", myform).prop("disabled", true).html('Signed Successfully!');
+            },
+        data: $(this).serialize(),
+        error: function() {},
+    });
+
+});
+</script>
 {% endblock %}

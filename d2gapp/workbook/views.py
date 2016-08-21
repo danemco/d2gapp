@@ -7,10 +7,11 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.contrib import messages
 from django.forms.models import model_to_dict
 from django.http.response import HttpResponseRedirect
+from django.utils import timezone
 
 from .models import Assignment, PersonProgress, Profile, ProfileNotify
 from .forms import AssignmentForm, ProfileLoginForm, ProfileNotifyForm, ReviewSectionForm
-from .utils import notify_completed_assignment
+from .utils import notify_completed_assignment, notify_review_assignment
 
 # Create your views here.
 class AjaxableResponseMixin(object):
@@ -100,14 +101,16 @@ class CompleteAssignmentView(CreateView):
 
         return retval
 
-class CompleteReviewAssignemtnView(FormView):
+class CompleteReviewAssignmentView(FormView):
     form_class = ReviewSectionForm
+    template_name = 'workbook/review_assignment.html'
+
     success_url = reverse_lazy('assignment_list')
 
     def get_form_kwargs(self):
         kwargs = super(CompleteReviewAssignmentView, self).get_form_kwargs()
         kwargs['profile'] = self.request.session['profile']
-        kwargs['personprogress'] = self.request.session['profile']
+        # kwargs['personprogress'] = self.request.session['profile'] # commented out because I don't think I need it
         return kwargs
 
     def get_context_data(self, **kwargs):
@@ -126,10 +129,26 @@ class CompleteReviewAssignemtnView(FormView):
         pp.shared_with = pn
         self.object = pp.save()
 
-        notify_review_assignment(pn, self.object)
+        notify_review_assignment(pn, pp)
         messages.add_message(self.request, messages.SUCCESS, "Request for seview sent to %s" % pn.name)
 
         return retval
+
+class SignReviewForm(AjaxableResponseMixin, UpdateView):
+    model = PersonProgress
+    fields = ['reviewed_by']
+    success_url = reverse_lazy('leader_report')
+
+    def form_valid(self, form):
+        retval = super(SignReviewForm, self).form_valid(form)
+        pp = self.object
+
+        pp.reviewed_by = self.request.session.get('profile')
+        pp.review_completed = timezone.now()
+
+        pp.save()
+        return retval
+
 
 class UpdateAssignmentView(UpdateView):
     model = PersonProgress

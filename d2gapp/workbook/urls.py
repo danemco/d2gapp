@@ -8,6 +8,9 @@ urlpatterns = [
         url(r'^profile-activity/$', profile_required(views.AssignmentListView.as_view()), name="assignment_list"),
         url(r'^activity/(?P<assignment>\d+)/complete/$', profile_required(views.CompleteAssignmentView.as_view()), name="assignment_create"),
         url(r'^activity/(?P<assignment>\d+)/update/$', profile_required(views.UpdateAssignmentView.as_view()), name="assignment_update"),
+        url(r'^review-activity/(?P<assignment>\d+)/complete/$', profile_required(views.CompleteReviewAssignmentView.as_view()), name="review_create"),
+        #url(r'^review-activity/(?P<assignment>\d+)/update/$', profile_required(views.UpdateReviewAssignmentView.as_view()), name="review_update"), # TODO
+        url(r'^sign-activity/(?P<pk>\d+)/$', profile_required(views.SignReviewForm.as_view()), name="sign_personprogress"),
 
         # Profile-reltaed views
         url(r'^profile/create/$', views.RegisterProfileView.as_view(), name="profile_create"),

@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>{{ assignment.title }}</h1>
+<div class="well">
+<h3>{{ assignment.get_office_display }} - {{ assignment.get_section_display }}</h3>
+<form action="." method="post" class="form-horizontal" id="activity-form">
+    {% csrf_token %}
+{{ form.non_field_errors }}
+{{ assignment.learn|safe }}
+
+<table class="table">
+    <tr>
+        <td>
+            <p>My Signature:</p>
+        </td>
+        <td>
+            {{ form.my_signature }}
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <p>Invite to Review &amp; Sign:</p>
+        </td>
+        <td>
+            {% if form.review_by.errors %}
+            <span class="text-danger">{{ form.review_by.errors }}</span>
+            {% endif %}
+            {{ form.review_by }}
+        </td>
+    </tr>
+</table>
+    <button type="submit" class="btn btn-raised btn-primary">Save</button>
+</form>
+
+{% endblock %}
+
+{% block footerscripts %}
+{% endblock %}
