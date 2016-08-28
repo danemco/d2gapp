@@ -75,7 +75,8 @@ class PersonProgress(models.Model):
     act3 = models.TextField(blank = True, null = True)
     share = models.TextField(blank = True, null = True)
     date_completed = models.DateTimeField(auto_now_add = True)
-    shared_with = models.ForeignKey('ProfileNotify', blank=True, null=True)
+    shared_with = models.CharField(max_length=80, blank=True, null=True)
+    review_requested_to = models.ForeignKey('ProfileNotify', blank=True, null=True)
     reviewed_by = models.ForeignKey(Profile, blank=True, null=True, related_name='reviewed_list')
     review_completed = models.DateTimeField(blank = True, null = True)
 

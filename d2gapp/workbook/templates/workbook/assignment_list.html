@@ -32,7 +32,7 @@
                     {% if assignment.review %}
                     <a href="#">{{ assignment.title }}</a>
                     {% else %}
-                    <a href="{% url 'assignment_update' assignment.id %}">{{ assignment.title }}</a>
+                    <a href="{% url 'assignment_update' assignment.id %}" class="complete-{{ assignment.office }}-{{ assignment.section }}">{{ assignment.title }}</a>
                     {% endif %}
                 </div>
                 <div class="col-xs-2 text-center">
@@ -45,7 +45,7 @@
             <div class="row activity-row activity-{{ assignment.section }}">
                 <div class="col-xs-9">
                     {% if assignment.review %}
-                    <a href="{% url 'review_create' assignment.id %}">{{ assignment.title }}</a>
+                    <a href="{% url 'review_create' assignment.id %}" class="review-{{ assignment.office }}-{{ assignment.section }}">{{ assignment.title }}</a>
                     {% else %}
                     <a href="{% url 'assignment_create' assignment.id %}">{{ assignment.title }}</a>
                     {% endif %}
@@ -64,4 +64,52 @@
     </table>
 {% endfor %}
 </div>
+{% endblock %}
+
+{% block footerscripts %}
+<script>
+$('.review-d-ss').on('click', function (e) {
+    if ($('.complete-d-ss').length != 3)
+    {
+        e.preventDefault();
+        alert('You need to complete all Spiritual Strength sections before completing the review.');
+    }
+});
+$('.review-d-pd').on('click', function (e) {
+    if ($('.complete-d-ss').length != 3)
+    {
+        e.preventDefault();
+        alert('You need to complete all Priesthood Duties sections before completing the review.');
+    }
+});
+$('.review-t-ss').on('click', function (e) {
+    if ($('.complete-d-ss').length != 3)
+    {
+        e.preventDefault();
+        alert('You need to complete all Spiritual Strength sections before completing the review.');
+    }
+});
+$('.review-t-pd').on('click', function (e) {
+    if ($('.complete-d-ss').length != 3)
+    {
+        e.preventDefault();
+        alert('You need to complete all Priesthood Duties sections before completing the review.');
+    }
+});
+$('.review-p-ss').on('click', function (e) {
+    if ($('.complete-d-ss').length != 3)
+    {
+        e.preventDefault();
+        alert('You need to complete all Spiritual Strength sections before completing the review.');
+    }
+});
+$('.review-p-pd').on('click', function (e) {
+    if ($('.complete-d-ss').length != 3)
+    {
+        e.preventDefault();
+        alert('You need to complete all Priesthood Duties sections before completing the review.');
+    }
+});
+</script>
+
 {% endblock %}

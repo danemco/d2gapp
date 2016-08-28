@@ -126,7 +126,7 @@ class CompleteReviewAssignmentView(FormView):
         pp.profile = self.request.session['profile']
         pp.assignment = get_object_or_404(Assignment, pk = self.kwargs.get('assignment', None))
         pp.act1 = form.cleaned_data['my_signature']
-        pp.shared_with = pn
+        pp.review_requested_to = pn
         self.object = pp.save()
 
         notify_review_assignment(pn, pp)
