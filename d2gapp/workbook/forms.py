@@ -63,3 +63,19 @@ class ProfileNotifyForm(forms.ModelForm):
                 'phone': forms.TextInput(attrs={"placeholder": "Phone Number", 'class': 'form-control'}),
                 'name': forms.TextInput(attrs={"placeholder": "Name", 'class': 'form-control'}),
                 }
+
+class PrepareTextMessageForm(forms.Form):
+    message = forms.CharField(widget=forms.widgets.Textarea)
+    send_to = forms.MultipleChoiceField(choices=(), widget=forms.CheckboxSelectMultiple(attrs={'checked': 'checked'}))
+
+    def __init__(self, profile, *args, **kwargs):
+        super(PrepareTextMessageForm, self).__init__(*args, **kwargs)
+        reporting_profiles = []
+        for pn in ProfileNotify.objects.filter(phone = profile.phone):
+            reporting_profiles.append(pn.profile)
+
+        self.fields['send_to'] = forms.MultipleChoiceField(
+            choices = [(p.id, p.full_name()) for p in reporting_profiles],
+            widget=forms.CheckboxSelectMultiple(attrs={'checked': 'checked'})
+        )
+

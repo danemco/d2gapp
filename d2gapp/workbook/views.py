@@ -10,7 +10,7 @@ from django.http.response import HttpResponseRedirect
 from django.utils import timezone
 
 from .models import Assignment, PersonProgress, Profile, ProfileNotify
-from .forms import AssignmentForm, ProfileLoginForm, ProfileNotifyForm, ReviewSectionForm
+from .forms import AssignmentForm, ProfileLoginForm, ProfileNotifyForm, ReviewSectionForm, PrepareTextMessageForm
 from .utils import notify_completed_assignment, notify_review_assignment
 
 # Create your views here.
@@ -339,3 +339,19 @@ class LeaderDetailView(DetailView):
 
         return obj
 
+class PrepareTextMessageView(FormView):
+    form_class = PrepareTextMessageForm
+    success_url = reverse_lazy('leader_report')
+    template_name = 'workbook/prepare_text_message.html'
+
+    def get_form_kwargs(self):
+        kwargs = super(PrepareTextMessageView, self).get_form_kwargs()
+        kwargs['profile'] = self.request.session['profile']
+        # kwargs['personprogress'] = self.request.session['profile'] # commented out because I don't think I need it
+        return kwargs
+
+    def form_valid(self, form):
+        retval = super(PrepareTextMessageView, self).form_valid(form)
+        messages.add_message(self.request, messages.SUCCESS, "Text message sent successfully.")
+
+        return retval
