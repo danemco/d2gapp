@@ -14,7 +14,8 @@ def get_pp(assignment, profile):
 def assignments_completed(profile):
     assignments = []
     for pp in PersonProgress.objects.filter(profile = profile):
-        assignments.append(pp.assignment)
+        if pp.shared_with is not None:
+            assignments.append(pp.assignment)
 
     return assignments
 

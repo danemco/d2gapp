@@ -8,7 +8,11 @@
 
     {% for pr in profile.personprogress_set.all %}
     <h3>{{ pr.assignment }} ({{ pr.assignment.get_section_display }} / {{ pr.assignment.get_office_display }})</h3>
+        {% if pr.shared_with %}
         <i>Completed on {{ pr.date_completed }}</i>
+        {% else %}
+        <i>Incomplete</i>
+        {% endif %}
         <br>
         <br>
     {% if pr.assignment.review %}
@@ -43,6 +47,12 @@
         {% if pr.share %}
         <p><b>Share: {{ pr.assignment.share|safe }}</b></p>
         <p><i>Response: </i>{{ pr.share }}</p>
+        {% endif %}
+
+        {% if pr.shared_with %}
+        <p><i>Shared with: </i>{{ pr.shared_with }}</p>
+        {% else %}
+        <p>This young man has not yet recorded that he has shared this activity with anyone.</p>
         {% endif %}
         </div>
 

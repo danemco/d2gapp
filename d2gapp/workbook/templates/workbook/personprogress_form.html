@@ -34,6 +34,12 @@
 {{ form.profile }}
 
 <hr>
+
+<h3>Record Sharing</h3>
+{{ form.shared_with.errors }}
+<p>To complete this activity, please record with whom you shared your learn + act experience.</p> 
+{{ form.shared_with }}
+
     <button type="submit" class="btn btn-raised btn-primary">Save</button>
 </form>
 
@@ -48,5 +54,7 @@
 <script>
  $('#activity-form textarea').addClass( "form-control" );
  $('#activity-form textarea').attr( "placeholder", "(type in this area)" );
+ $('#activity-form input').addClass( "form-control" );
+ $('#activity-form input').attr( "placeholder", "name and date" );
 </script>
 {% endblock %}

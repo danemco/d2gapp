@@ -5,7 +5,7 @@ class AssignmentForm(forms.ModelForm):
 
     class Meta:
         model = PersonProgress
-        fields = ['profile', 'assignment', 'act1', 'act2', 'act3', 'share']
+        fields = ['profile', 'assignment', 'act1', 'act2', 'act3', 'share', 'shared_with']
         widgets = {
                 'profile': forms.HiddenInput(),
                 'assignment': forms.HiddenInput(),

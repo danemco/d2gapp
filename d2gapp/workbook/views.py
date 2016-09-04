@@ -60,11 +60,16 @@ class AssignmentListView(ListView):
 
         p = self.request.session.get('profile')
         profile_assignment_completed = []
+        profile_assignment_started   = []
 
         for pp in p.personprogress_set.all():
-            profile_assignment_completed.append(pp.assignment)
+            if pp.shared_with != "" or pp.shared_with is not None:
+                profile_assignment_completed.append(pp.assignment)
+            else:
+                profile_assignment_started.append(pp.assignment)
 
         context['profile_assignment_completed'] = profile_assignment_completed
+        context['profile_assignment_started']   = profile_assignment_completed
 
         return context
 
