@@ -15,58 +15,51 @@
     Priest Activities
     {% endif %}
 </h1>
-    <div class="row">
-        <div class="col-xs-9">
-            <p class="lead">Activity</p>
-        </div>
-        <div class="col-xs-2 text-center">
-            <p class="lead">Complete?</p>
-        </div>
-        <div class="col-xs-1">
-        </div>
-    </div>
         {% for assignment in office.list %}
             {% if assignment in profile_assignment_completed %}
-            <div class="row  activity-row activity-success">
-                <div class="col-xs-9">
+            <div class="row  activity-row">
+                <div class="col-xs-1 text-center">
+                    <i class="material-icons">done</i>
+                </div>
+                <div class="col-xs-7">
                     {% if assignment.review %}
                     <a href="#">{{ assignment.title }}</a>
                     {% else %}
                     <a href="{% url 'assignment_update' assignment.id %}" class="complete-{{ assignment.office }}-{{ assignment.section }}">{{ assignment.title }}</a>
                     {% endif %}
                 </div>
-                <div class="col-xs-2 text-center">
-                    <i class="material-icons">assignment_turned_in</i>
-                </div>
-                <div class="col-xs-1">
+                <div class="col-xs-4">
+                    <p class="text-muted">{{ assignment.get_section_display }}</p>
                 </div>
             </div>
             {% elif assignment in profile_assignment_started %}
-            <div class="row activity-row activity-{{ assignment.section }}">
-                <div class="col-xs-9">
+            <div class="row activity-row">
+                <div class="col-xs-1">
+                </div>
+                <div class="col-xs-7">
                     {% if assignment.review %}
                     <a href="{% url 'review_create' assignment.id %}" class="review-{{ assignment.office }}-{{ assignment.section }}">{{ assignment.title }}</a>
                     {% else %}
                     <a href="{% url 'assignment_update' assignment.id %}">{{ assignment.title }}</a>
                     {% endif %}
                 </div>
-                <div class="col-xs-2">
-                </div>
-                <div class="col-xs-1">
+                <div class="col-xs-4">
+                    <p class="text-muted">{{ assignment.get_section_display }}</p>
                 </div>
             </div>
             {% else %}
-            <div class="row activity-row activity-{{ assignment.section }}">
-                <div class="col-xs-9">
+            <div class="row activity-row">
+                <div class="col-xs-1">
+                </div>
+                <div class="col-xs-7">
                     {% if assignment.review %}
                     <a href="{% url 'review_create' assignment.id %}" class="review-{{ assignment.office }}-{{ assignment.section }}">{{ assignment.title }}</a>
                     {% else %}
                     <a href="{% url 'assignment_create' assignment.id %}">{{ assignment.title }}</a>
                     {% endif %}
                 </div>
-                <div class="col-xs-2">
-                </div>
-                <div class="col-xs-1">
+                <div class="col-xs-4">
+                    <p class="text-muted">{{ assignment.get_section_display }}</p>
                 </div>
             </div>
             {% endif %}

@@ -84,13 +84,23 @@ th.rotate {
 
 th.rotate > div {
   transform: 
-    /* Magic Numbers */
-    translate(25px, 51px)
-    /* 45 is really 360 - 45 */
-    rotate(315deg);
-  width: 30px;
+    translate(-7px, 113px)
+    rotate(270deg);
+  width: 18px;
 }
 th.rotate > div > span {
   border-bottom: 1px solid #ccc;
   padding: 5px 10px;
+}
+
+.assignment-t {
+    background-color: #eee;
+}
+
+.text-input {
+    width: 96%;
+    height: auto;
+    font-size: 16pt;
+    line-height: 1.428;
+    padding: 7px 0;
 }

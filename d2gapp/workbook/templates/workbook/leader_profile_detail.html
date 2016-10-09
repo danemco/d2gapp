@@ -8,10 +8,18 @@
 
     {% for pr in profile.personprogress_set.all %}
     <h3>{{ pr.assignment }} ({{ pr.assignment.get_section_display }} / {{ pr.assignment.get_office_display }})</h3>
-        {% if pr.shared_with %}
-        <i>Completed on {{ pr.date_completed }}</i>
+        {% if pr.assignment.review == False %}
+            {% if pr.shared_with %}
+            <i>Completed on {{ pr.date_completed }}</i>
+            {% else %}
+            <i>Incomplete</i>
+            {% endif %}
         {% else %}
-        <i>Incomplete</i>
+            {% if pr.reviewed_by %}
+            <i>Completed on {{ pr.review_completed }}</i>
+            {% else %}
+            <i>Incomplete</i>
+            {% endif %}
         {% endif %}
         <br>
         <br>

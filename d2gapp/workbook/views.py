@@ -63,13 +63,13 @@ class AssignmentListView(ListView):
         profile_assignment_started   = []
 
         for pp in p.personprogress_set.all():
-            if pp.shared_with != "" or pp.shared_with is not None:
+            if pp.shared_with != "" and pp.shared_with is not None:
                 profile_assignment_completed.append(pp.assignment)
             else:
                 profile_assignment_started.append(pp.assignment)
 
         context['profile_assignment_completed'] = profile_assignment_completed
-        context['profile_assignment_started']   = profile_assignment_completed
+        context['profile_assignment_started']   = profile_assignment_started
 
         return context
 
@@ -132,6 +132,7 @@ class CompleteReviewAssignmentView(FormView):
         pp.assignment = get_object_or_404(Assignment, pk = self.kwargs.get('assignment', None))
         pp.act1 = form.cleaned_data['my_signature']
         pp.review_requested_to = pn
+        pp.shared_with = str(pn)
         self.object = pp.save()
 
         notify_review_assignment(pn, pp)

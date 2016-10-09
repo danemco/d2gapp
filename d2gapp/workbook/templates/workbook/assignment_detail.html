@@ -7,22 +7,22 @@
 {{ assignment.learn|safe }}
 <h2>Act</h2>
 {{ assignment.act1|safe }}
-<textarea class="form-control" rows=4>
+<textarea class="text-input" rows=4>
 </textarea>
 {% if assignmetn.act2 %}
 {{ assignment.act2|safe }}
-<textarea class="form-control" rows=4>
+<textarea class="text-input" rows=4>
 </textarea>
 {% endif %}
 {% if assignmetn.act3 %}
 {{ assignment.act3|safe }}
-<textarea class="form-control" rows=4>
+<textarea class="text-input" rows=4>
 </textarea>
 {% endif %}
 <h2>Share</h2>
 {{ assignment.share|safe }}
 {% if assignment.share_has_textarea %}
-<textarea class="form-control" rows=4>
+<textarea class="text-input" rows=4>
 </textarea>
 {% endif %}
 
