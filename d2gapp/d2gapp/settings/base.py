@@ -29,6 +29,14 @@ ALLOWED_HOSTS = []
 
 ADMINS = [('Dan Purcell', 'danielpurcell@gmail.com'), ('Dan Purcell', 'dan@velocitywebworks.com')]
 
+EMAIL_BACKEND = 'django_smtp_ssl.SSLEmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_PASSWORD = 'passwords'
+EMAIL_HOST_USER = 'errors@velocitywebworks.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = 'errors@velocitywebworks.com'
+
 
 # Application definition
 
