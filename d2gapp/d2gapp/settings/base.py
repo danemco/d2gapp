@@ -27,6 +27,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+ADMINS = [('Dan Purcell', 'danielpurcell@gmail.com'), ('Dan Purcell', 'dan@velocitywebworks.com')]
+
 
 # Application definition
 
