@@ -9,7 +9,7 @@ from django.forms.models import model_to_dict
 from django.http.response import HttpResponseRedirect
 from django.utils import timezone
 
-from .models import Assignment, PersonProgress, Profile, ProfileNotify, Unit
+from .models import Assignment, PersonProgress, Profile, ProfileNotify, Unit, DefaultNotifier
 from .forms import AssignmentForm, ProfileLoginForm, ProfileNotifyForm, ReviewSectionForm, PrepareTextMessageForm
 from .utils import notify_completed_assignment, notify_review_assignment
 
@@ -199,6 +199,16 @@ class RegisterProfileView(CreateView):
         self.request.session['profile'] = self.object
         messages.add_message(self.request, messages.SUCCESS, "Profile successfully created!")
         messages.add_message(self.request, messages.ERROR, '<i class="material-icons">priority_high</i> NEXT STEP: Add key people (such as a parent) to receive a text message when you complete an activity by editing the information below.')
+
+        # Prepopulate default notifications for the given unit
+        for dn in self.object.unit.defaultnotifier_set.all():
+            if dn.show_to == '-' or dn.show_to == self.object.office:
+                pn = ProfileNotify()
+                pn.profile = self.object
+                pn.phone   = dn.phone
+                pn.position = dn.position
+                pn.name    = dn.name
+                pn.save()
 
         return retval
 
