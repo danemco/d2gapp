@@ -39,10 +39,4 @@ class Migration(migrations.Migration):
             name='unit',
             field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='workbook.Unit'),
         ),
-        migrations.AddField(
-            model_name='profile',
-            name='unit',
-            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, to='workbook.Unit'),
-            preserve_default=False,
-        ),
     ]

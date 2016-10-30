@@ -22,4 +22,10 @@ class Migration(migrations.Migration):
             name='position',
             field=models.CharField(blank=True, max_length=30, null=True),
         ),
+        migrations.AddField(
+            model_name='profile',
+            name='unit',
+            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, to='workbook.Unit'),
+            preserve_default=False,
+        ),
     ]
