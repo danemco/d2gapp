@@ -37,13 +37,45 @@ class Assignment(models.Model):
     class Meta:
         ordering = ['office', 'ordering']
 
+
+class Unit(models.Model):
+    stake = models.CharField(max_length = 255)
+    ward = models.CharField("ward or branch", max_length = 50, blank = True, null = True)
+    password = models.CharField(max_length = 50)
+
+    def __unicode__(self):
+        return "%s - %s" % (self.stake, self.ward)
+
+    class Meta:
+        ordering = ['stake', 'ward']
+
+class DefaultNotifier(models.Model):
+    SHOW_TO_OFFICES = (
+        ('d', 'Deacon'),
+        ('t', 'Teacher'),
+        ('z', 'Priest'),
+        ('-', 'All Young Men'),
+    )
+
+    unit = models.ForeignKey(Unit)
+    phone = models.CharField(max_length = 10)
+    position = models.CharField(max_length = 30)
+    name = models.CharField(max_length = 50)
+    show_to = models.CharField(max_length = 2, choices = SHOW_TO_OFFICES, default='-')
+
+    def __unicode__(self):
+        return "%s (%s - %s)" % (self.name, self.unit.stake, self.unit.ward)
+    
+
 class Profile(models.Model):
     first_name = models.CharField(max_length=25)
     last_name = models.CharField(max_length=25)
     office = models.CharField(max_length = 2, choices = OFFICE, verbose_name="priesthood office")
     phone = models.CharField("phone number", max_length = 10, help_text="Use your full 10 digit phone number for receiving text messages", blank = True, null =  True)
     receive_text_messages = models.BooleanField(default=True)
+    # Note: ward isn't in use anymore, but here for old Profile records that had an assigned ward
     ward = models.CharField("ward or branch", max_length = 50, blank = True, null = True)
+    unit = models.ForeignKey(Unit)
 
     def __unicode__(self):
         return "%s %s" % (self.first_name, self.last_name)
@@ -59,6 +91,7 @@ class ProfileNotify(models.Model):
     profile = models.ForeignKey(Profile)
     phone = models.CharField(max_length = 10)
     name = models.CharField(max_length = 50)
+    position = models.CharField(max_length = 30, blank = True, null = True)
 
     def __unicode__(self):
         return "%s - %s (%s)" % (self.profile, self.name, self.phone)

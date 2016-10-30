@@ -72,19 +72,6 @@ $(function () {
 {% endblock %}
 
 {% block content %}
-<h1>{% if object %}Update{% else %}Create{% endif %} Profile</h1>
-<form action="." method="post" class="form-horizontal" id="profile-form">
-<fieldset>
-    {% csrf_token %}
-    <div class="well">
-        <table class="table">
-        {{ form }}
-        </table>
-        <button type="submit" class="btn btn-raised btn-primary">{% if object %}Save Profile Changes{% else %}Create Profile{% endif %}</button>
-        <a href="{% url 'assignment_list' %}" class="btn btn-raised">Cancel</a>
-    </div>
-</fieldset>
-</form>
 
 {% if object %}
 <hr>
@@ -92,8 +79,8 @@ $(function () {
 <h3 id="notification-list-area">Notification List</h3>
 <p>Notify key people to automatically receive updates when you complete assignments.</p>
 
-<div id="notifylist1" class="pull-left" style="padding-right: 30px;">
-</div>
+<!--<div id="notifylist1" class="pull-left" style="padding-right: 30px;">
+</div>-->
 
 <div class="table-responsive">
 <table class="table-condensed">
@@ -145,15 +132,15 @@ $(function () {
       <form action="{% url 'profile_notify_add' %}" method="post" id="addnotify">
       <div class="modal-body">
               {% csrf_token %}
-              <select id="recipient-type" name="recipient_type" class="form-control">
-                  <option value="-">-- SELECT ONE --</option>
+              <select id="recipient-type" name="position" class="form-control">
+                  <option value="-">-- POSITION --</option>
                   <option value="Quorum President">Quorum President / Assnt.</option>
                   <option value="Advisor">Advisor</option>
                   <option value="Parent">Parent</option>
                   <option value="Bishop">Bishop</option>
                   <option value="Other">Other</option>
               </select>
-              <input class="id_name form-control" id="new-notifier-name" maxlength="50" name="name" placeholder="Contact Type" type="hidden"/>
+              <input class="id_name form-control" id="new-notifier-name" maxlength="50" name="name" placeholder="Name" type="text"/>
               <input class="id_phone form-control" id="new-notifier-phone" maxlength="10" name="phone" placeholder="Phone Number" type="text" />
               <span class="helptext">10 digit phone number, no spaces or dashes.</span>
       </div>
@@ -169,6 +156,20 @@ $(function () {
 
 </div>
 {% endif %}
+
+<h1>{% if object %}Update{% else %}Create{% endif %} Profile</h1>
+<form action="." method="post" class="form-horizontal" id="profile-form">
+<fieldset>
+    {% csrf_token %}
+    <div class="well">
+        <table class="table">
+        {{ form }}
+        </table>
+        <button type="submit" class="btn btn-raised btn-primary">{% if object %}Save Profile Changes{% else %}Create Profile{% endif %}</button>
+        <a href="{% url 'assignment_list' %}" class="btn btn-raised">Cancel</a>
+    </div>
+</fieldset>
+</form>
 
 {% endblock %}
 
@@ -241,6 +242,7 @@ $('#id_phone, .id_phone').keyup(function () {
         this.value = this.value.replace(regex, '');
 });
 
+/*
 $('#recipient-type').change(function() {
     var recipient_type = $(this).val();
 
@@ -258,6 +260,7 @@ $('#recipient-type').change(function() {
     }
 
 });
+*/
 
  $('#profile-form input').addClass( "form-control" );
  $('#profile-form select').addClass( "form-control" );

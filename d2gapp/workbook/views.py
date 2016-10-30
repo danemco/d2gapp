@@ -9,7 +9,7 @@ from django.forms.models import model_to_dict
 from django.http.response import HttpResponseRedirect
 from django.utils import timezone
 
-from .models import Assignment, PersonProgress, Profile, ProfileNotify
+from .models import Assignment, PersonProgress, Profile, ProfileNotify, Unit
 from .forms import AssignmentForm, ProfileLoginForm, ProfileNotifyForm, ReviewSectionForm, PrepareTextMessageForm
 from .utils import notify_completed_assignment, notify_review_assignment
 
@@ -189,23 +189,28 @@ class UpdateAssignmentView(UpdateView):
 
     
 class RegisterProfileView(CreateView):
-    success_url = reverse_lazy('assignment_list')
+    success_url = reverse_lazy('profile_update')
     model = Profile
-    fields = ['first_name', 'last_name', 'office', 'phone', 'receive_text_messages', 'ward']
+    fields = ['first_name', 'last_name', 'office', 'phone', 'receive_text_messages', 'unit']
 
     def form_valid(self, form):
         retval = super(RegisterProfileView, self).form_valid(form)
 
         self.request.session['profile'] = self.object
         messages.add_message(self.request, messages.SUCCESS, "Profile successfully created!")
-        messages.add_message(self.request, messages.ERROR, '<i class="material-icons">priority_high</i> To notify others of completed activities, add people to your notification list in your <a href="/profile/update/#notification-list-area"><i class="material-icons">account_box</i> profile settings</a>.')
+        messages.add_message(self.request, messages.ERROR, '<i class="material-icons">priority_high</i> NEXT STEP: Add key people (such as a parent) to receive a text message when you complete an activity by editing the information below.')
 
         return retval
+
+    def get_context_data(self):
+        context = super(RegisterProfileView, self).get_context_data()
+        context['unit_list'] = Unit.objects.all()
+        return context
 
 class UpdateProfileView(UpdateView):
     success_url = reverse_lazy('profile_detail')
     model = Profile
-    fields = ['first_name', 'last_name', 'office', 'phone', 'receive_text_messages', 'ward']
+    fields = ['first_name', 'last_name', 'office', 'phone', 'receive_text_messages', 'unit']
 
     def get_object(self, queryset=None):
         try:
