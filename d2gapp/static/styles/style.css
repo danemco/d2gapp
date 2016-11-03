@@ -94,7 +94,7 @@ th.rotate > div > span {
 }
 
 .assignment-t {
-    background-color: #eee;
+    background-color: inherit;
 }
 
 .text-input {

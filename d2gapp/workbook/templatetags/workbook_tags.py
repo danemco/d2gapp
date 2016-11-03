@@ -10,6 +10,10 @@ Returns the personprogress object id given an assignment and a profile.
 def get_pp(assignment, profile):
     return PersonProgress.objects.get(profile = profile, assignment = assignment)
 
+@register.filter
+def office(qs, office):
+    return qs.filter(office = office)
+
 @register.simple_tag
 def assignments_completed(profile):
     assignments = []

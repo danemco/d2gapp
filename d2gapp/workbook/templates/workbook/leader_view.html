@@ -10,25 +10,51 @@
 <div class="well">
 
 {% if reporting_profile_list|length %}
+{% regroup reporting_profile_list by office as reporting_profile_list_by_office %}
+
+{% for office in reporting_profile_list_by_office %}
+{% if office.grouper != '-' %}
     <div style="min-height: 150px">
     <!-- give room -->
     </div>
+{% endif %}
+<h3>
+    {% if office.grouper == 'd' %}
+    Deacons
+    {% elif office.grouper == 't' %}
+    Teachers
+    {% elif office.grouper == 'z' %}
+    Priests
+    {% elif office.grouper == '-' %}
+    Advisor / Bishop / Parents
+    {% endif %}
+</h3>
 <table class="table">
     <!-- Fill out the table heading -->
 <tr>
     <th style="border-top-width: 0px">Name</th>
     <th style="border-top-width: 0px">Office</th>
-    {% for assignment in assignment_list %}
-    <th class="rotate assignment-{{assignment.section}} assignment-{{assignment.office}}" style="border-top-width: 0px"><div><span>{{ assignment }}</span></div></th>
-    {% endfor %}
+    {% if office.grouper == 'd' %}
+        {% for assignment in assignment_list_d %}
+        <th class="rotate assignment-{{assignment.section}} assignment-{{assignment.office}}" style="border-top-width: 0px"><div><span>{{ assignment }}</span></div></th>
+        {% endfor %}
+    {% elif office.grouper == 't' %}
+        {% for assignment in assignment_list_t %}
+        <th class="rotate assignment-{{assignment.section}} assignment-{{assignment.office}}" style="border-top-width: 0px"><div><span>{{ assignment }}</span></div></th>
+        {% endfor %}
+    {% elif office.grouper == 'z' %}
+        {% for assignment in assignment_list_p %}
+        <th class="rotate assignment-{{assignment.section}} assignment-{{assignment.office}}" style="border-top-width: 0px"><div><span>{{ assignment }}</span></div></th>
+        {% endfor %}
+    {% endif %}
 </tr>
 
-{% for profile in reporting_profile_list %}
+{% for profile in office.list %}
 <tr>
     <td><a href="{% url 'leader_detail' profile.id %}">{{ profile.last_name }}, {{ profile.first_name }}</a></td>
     <td>{{ profile.get_office_display }}</td>
     {% assignments_completed profile as assignments_completed_list %}
-    {% for assignment in assignment_list %}
+    {% for assignment in assignment_list|office:office.grouper %}
     <td class="assignment-{{assignment.office}}">
         {% if assignment in assignments_completed_list %}
             <i class="material-icons">done</i>
@@ -41,6 +67,7 @@
 
 {% endfor %}
 </table>
+{% endfor %}
 
 {% else %}
 <h3>Nothing Here</h3>
