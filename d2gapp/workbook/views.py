@@ -315,7 +315,7 @@ class LeaderReportView(TemplateView):
         context["assignment_list"] = Assignment.objects.all()
         context["assignment_list_d"] = Assignment.objects.filter(office = 'd')
         context["assignment_list_t"] = Assignment.objects.filter(office = 't')
-        context["assignment_list_p"] = Assignment.objects.filter(office = 'p')
+        context["assignment_list_p"] = Assignment.objects.filter(office = 'z')
 
         # Get a list of profiles that report to the logged in user
         try:
