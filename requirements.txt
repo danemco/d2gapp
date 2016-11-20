@@ -14,3 +14,4 @@ gunicorn
 whitenoise
 dj-database-url
 psycopg2==2.6.1
+django-registration
