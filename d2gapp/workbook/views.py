@@ -221,7 +221,7 @@ class RegisterProfileView(CreateView):
 class UpdateProfileView(UpdateView):
     success_url = reverse_lazy('profile_detail')
     model = Profile
-    fields = ['first_name', 'last_name', 'office', 'phone', 'receive_text_messages', 'unit']
+    form_class = RegisterProfileForm
 
     def get_object(self, queryset=None):
         try:
@@ -230,8 +230,8 @@ class UpdateProfileView(UpdateView):
             raise Http404("No profile found. Try logging in or creating one.") 
         return p
 
-    def get_context_data(self):
-        context = super(UpdateProfileView, self).get_context_data()
+    def get_context_data(self, **kwargs):
+        context = super(UpdateProfileView, self).get_context_data(**kwargs)
         context['form2'] = ProfileNotifyForm
         return context
 
@@ -242,6 +242,12 @@ class UpdateProfileView(UpdateView):
         messages.add_message(self.request, messages.SUCCESS, "Profile updated successfully!")
 
         return retval
+
+    def get_initial(self):
+        init_data = super(UpdateProfileView, self).get_initial()
+        init_data['stake'] = self.object.unit.stake
+        init_data['ward']  = self.object.unit
+        return init_data
 
 class ProfileDetailView(TemplateView):
     template_name = 'workbook/profile_detail.html'

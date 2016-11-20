@@ -271,7 +271,9 @@ $('#recipient-type').change(function() {
 
 $(function() {
     updateNotifList();
+    {% if not object %}
     $('#id_unit').empty();
+    {% endif %}
     item = $('#profile-form tr:eq(5)').remove()
     $('#profile-form tbody').append(item)
 });
