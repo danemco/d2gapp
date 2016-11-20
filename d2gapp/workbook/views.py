@@ -1,16 +1,17 @@
 from django.shortcuts import render, get_object_or_404
-from django.views.generic import DetailView, TemplateView, ListView
+from django.views.generic import DetailView, TemplateView, ListView, View
 from django.views.generic.edit import CreateView, FormView, UpdateView, DeleteView
+from django.core import serializers
 from django.core.urlresolvers import reverse_lazy, reverse
-from django.http import Http404, JsonResponse
 from django.core.exceptions import ObjectDoesNotExist
+from django.http import Http404, JsonResponse
 from django.contrib import messages
 from django.forms.models import model_to_dict
 from django.http.response import HttpResponseRedirect
 from django.utils import timezone
 
 from .models import Assignment, PersonProgress, Profile, ProfileNotify, Unit, DefaultNotifier
-from .forms import AssignmentForm, ProfileLoginForm, ProfileNotifyForm, ReviewSectionForm, PrepareTextMessageForm
+from .forms import AssignmentForm, ProfileLoginForm, ProfileNotifyForm, ReviewSectionForm, PrepareTextMessageForm, RegisterProfileForm
 from .utils import notify_completed_assignment, notify_review_assignment
 
 # Create your views here.
@@ -190,8 +191,8 @@ class UpdateAssignmentView(UpdateView):
     
 class RegisterProfileView(CreateView):
     success_url = reverse_lazy('profile_update')
-    model = Profile
-    fields = ['first_name', 'last_name', 'office', 'phone', 'receive_text_messages', 'unit']
+    form_class = RegisterProfileForm
+    template_name = 'workbook/profile_form.html'
 
     def form_valid(self, form):
         retval = super(RegisterProfileView, self).form_valid(form)
@@ -374,3 +375,10 @@ class PrepareTextMessageView(FormView):
         messages.add_message(self.request, messages.SUCCESS, "Text message sent successfully.")
 
         return retval
+
+class GetUnitsForStake(View):
+
+    def get(self, request, *args, **kwargs):
+        units = Unit.objects.all().filter(stake=self.kwargs.get('stake'), active=True)
+        return JsonResponse({'unit_list': list(units.values('id', 'ward'))})
+

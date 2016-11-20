@@ -162,11 +162,13 @@ $(function () {
 <fieldset>
     {% csrf_token %}
     <div class="well">
-        <table class="table">
+        <table class="table" id="profile-form">
         {{ form }}
         </table>
         <button type="submit" class="btn btn-raised btn-primary">{% if object %}Save Profile Changes{% else %}Create Profile{% endif %}</button>
+        {% if object %}
         <a href="{% url 'assignment_list' %}" class="btn btn-raised">Cancel</a>
+        {% endif %}
     </div>
 </fieldset>
 </form>
@@ -269,6 +271,21 @@ $('#recipient-type').change(function() {
 
 $(function() {
     updateNotifList();
+    $('#id_unit').empty();
+    item = $('#profile-form tr:eq(5)').remove()
+    $('#profile-form tbody').append(item)
+});
+
+$('#id_stake').change(function () {
+    console.log('Changed stake');
+    $.getJSON('/get-units-for-stake/' + $(this).val() + '/', function(json) {
+        $('#id_unit').empty();
+        $('#id_unit').append($('<option>').text("Select Ward"));
+        $.each(json['unit_list'], function(i, obj){
+                $('#id_unit').append($('<option>').text(obj.ward).attr('value', obj.id));
+            });
+    });
+
 });
 
 </script>

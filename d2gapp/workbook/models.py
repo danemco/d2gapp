@@ -36,12 +36,18 @@ class Assignment(models.Model):
 
     class Meta:
         ordering = ['office', 'ordering']
+class Stake(models.Model):
+    name = models.CharField(max_length = 50)
+    active = models.BooleanField(default=True)
 
+    def __unicode__(self):
+        return self.name
 
 class Unit(models.Model):
-    stake = models.CharField(max_length = 255)
+    stake = models.ForeignKey(Stake, blank=True, null=True)
     ward = models.CharField("ward or branch", max_length = 50, blank = True, null = True)
     password = models.CharField(max_length = 50)
+    active = models.BooleanField(default=True)
 
     def __unicode__(self):
         return "%s - %s" % (self.stake, self.ward)

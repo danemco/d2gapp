@@ -1,5 +1,5 @@
 from django import forms
-from .models import Assignment, PersonProgress, OFFICE, ProfileNotify
+from .models import Assignment, PersonProgress, OFFICE, ProfileNotify, Stake, Profile
 
 class AssignmentForm(forms.ModelForm):
 
@@ -78,4 +78,19 @@ class PrepareTextMessageForm(forms.Form):
             choices = [(p.id, p.full_name()) for p in reporting_profiles],
             widget=forms.CheckboxSelectMultiple(attrs={'checked': 'checked'})
         )
+class RegisterProfileForm(forms.ModelForm):
 
+    class Meta:
+        model = Profile
+        fields = ['first_name', 'last_name', 'office', 'phone', 'receive_text_messages', 'unit']
+
+        widgets = {
+                'unit': forms.Select(attrs={'class': 'form-control'}),
+                }
+
+    def __init__(self, *args, **kwargs):
+        super(RegisterProfileForm, self).__init__(*args, **kwargs)
+        self.fields['stake'] = forms.ModelChoiceField(
+                Stake.objects.filter(active=True), 
+                empty_label="Please Choose Your Stake",
+                widget=forms.Select(attrs={'class': 'form-control'}))
