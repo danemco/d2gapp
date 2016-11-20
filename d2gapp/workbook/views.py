@@ -10,7 +10,7 @@ from django.forms.models import model_to_dict
 from django.http.response import HttpResponseRedirect
 from django.utils import timezone
 
-from .models import Assignment, PersonProgress, Profile, ProfileNotify, Unit, DefaultNotifier
+from .models import Assignment, PersonProgress, Profile, ProfileNotify, Unit, DefaultNotifier, StakeAdmin
 from .forms import AssignmentForm, ProfileLoginForm, ProfileNotifyForm, ReviewSectionForm, PrepareTextMessageForm, RegisterProfileForm
 from .utils import notify_completed_assignment, notify_review_assignment
 
@@ -388,3 +388,74 @@ class GetUnitsForStake(View):
         units = Unit.objects.all().filter(stake=self.kwargs.get('stake'), active=True)
         return JsonResponse({'unit_list': list(units.values('id', 'ward'))})
 
+class StakeAdminWardList(ListView):
+    model = Unit
+    template_name = 'workbook/unit_list.html'
+
+    def get_queryset(self):
+        qs = super(StakeAdminWardList, self).get_queryset()
+        qs.filter(stake = self.request.user.stakeadmin.stake)
+        return qs
+
+class StakeAdminWardUpdate(UpdateView):
+    model = Unit
+    fields = ['stake', 'ward', 'active']
+    template_name = 'workbook/ward_form.html'
+    success_url = reverse_lazy('ward_list')
+
+    def get_context_data(self, **kwargs):
+        context = super(StakeAdminWardUpdate, self).get_context_data(**kwargs)
+        context['notification_list'] = DefaultNotifier.objects.filter(unit = self.kwargs.get('pk'))
+        return context
+
+    def form_valid(self, form):
+        retval = super(StakeAdminWardUpdate, self).form_valid(form)
+        messages.add_message(self.request, messages.SUCCESS, "Ward updated successfully.")
+        return retval
+
+class StakeAdminWardCreate(CreateView):
+    model = Unit
+    fields = ['stake', 'ward']
+    template_name = 'workbook/ward_form.html'
+    success_url = reverse_lazy('ward_list')
+
+    def get_initial(self):
+        initial_data = super(StakeAdminWardCreate, self).get_initial()
+        initial_data['stake'] = self.request.user.stakeadmin.stake
+        return initial_data
+
+    def form_valid(self, form):
+        retval = super(StakeAdminWardCreate, self).form_valid(form)
+        messages.add_message(self.request, messages.SUCCESS, "Ward created successfully.")
+        return retval
+
+class StakeAdminDefaultNotifierUpdate(UpdateView):
+    model = DefaultNotifier
+    fields = ['name', 'position', 'phone', 'show_to']
+
+    def get_success_url(self):
+        return reverse('ward_update', kwargs={'pk': self.object.unit.id})
+
+    def form_valid(self, form):
+        retval = super(StakeAdminDefaultNotifierUpdate, self).form_valid(form)
+        messages.add_message(self.request, messages.SUCCESS, "Details updated for " + self.object.name + ".")
+        return retval
+
+class StakeAdminDefaultNotifierCreate(CreateView):
+    model = DefaultNotifier
+    fields = ['name', 'position', 'phone', 'show_to']
+
+    def get_success_url(self):
+        return reverse('ward_update', kwargs={'pk': self.object.unit.id})
+
+    def form_valid(self, form):
+        form.instance.unit = Unit.objects.get(pk = self.kwargs.get('ward'))
+        messages.add_message(self.request, messages.SUCCESS, "Successfully created default notification for " + form.instance.name + ".")
+        return super(StakeAdminDefaultNotifierCreate, self).form_valid(form)
+
+
+class StakeAdminDefaultNotifierDelete(DeleteView):
+    model = DefaultNotifier
+    
+    def get_success_url(self):
+        return reverse('ward_update', kwargs={'pk': self.kwargs.get('ward')})

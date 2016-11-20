@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Wards in the {{ request.user.stakeadmin.stake }}</h1>
+<div class="well">
+    <p>Click on the name of the ward to edit its details.</p>
+    <table class="table">
+{% for unit in unit_list %}
+<tr>
+    <td style="vertical-align: middle;"><a href="{% url 'ward_update' unit.id %}"><b>{{ unit.ward }}</b></a></td>
+</tr>
+{% empty %}
+<tr><td>No wards defined for this stake.</td></tr>
+{% endfor %}
+</table>
+<a href="{% url 'ward_create' %}" class="btn btn-raised">Add New Ward</a>
+</div>
+{% endblock %}

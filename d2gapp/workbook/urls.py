@@ -27,4 +27,15 @@ urlpatterns = [
         url(r'^leader-report/detail/(?P<pk>\d+)/$', profile_required(views.LeaderDetailView.as_view()),name="leader_detail"),
         url(r'^new-text-message/$', profile_required(views.PrepareTextMessageView.as_view()), name="send_text_message"),
 
+        # Stake Admin views
+        url(r'^stake-admin/$', login_required(views.StakeAdminWardList.as_view()), name='ward_list'),
+#        url(r'^stake-admin/ward/(?P<pk>\d+)/$', login_required(views.StakeAdminWardDetail.as_view()), name='ward_detail'),
+        url(r'^stake-admin/update/ward/(?P<pk>\d+)/$', login_required(views.StakeAdminWardUpdate.as_view()), name='ward_update'),
+        url(r'^stake-admin/create/$', login_required(views.StakeAdminWardCreate.as_view()), name='ward_create'),
+#         url(r'^stake-admin/delete/(?P<pk>\d+)/$', login_required(), name='ward_delete'),
+#         url(r'^stake-admin/notify-list/ward/(?P<ward>\d+)/$', login_required(), name='defaultnotifier_list'),
+        url(r'^stake-admin/notify-list/update/(?P<pk>\d+)/$', login_required(views.StakeAdminDefaultNotifierUpdate.as_view()), name='defaultnotifier_update'),
+        url(r'^stake-admin/notify-list/create/ward/(?P<ward>\d+)/$', login_required(views.StakeAdminDefaultNotifierCreate.as_view()), name='defaultnotifier_create'),
+        url(r'^stake-admin/notify-list/ward/(?P<ward>\d+)/delete/(?P<pk>\d+)/$', login_required(views.StakeAdminDefaultNotifierDelete.as_view()), name='defaultnotifier_delete'),
+
 ]

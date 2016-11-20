@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 
 from django.db import models
+from django.contrib.auth.models import User
 
 OFFICE = (
     ('d', 'Deacon'),
@@ -46,20 +47,20 @@ class Stake(models.Model):
 class Unit(models.Model):
     stake = models.ForeignKey(Stake, blank=True, null=True)
     ward = models.CharField("ward or branch", max_length = 50, blank = True, null = True)
-    password = models.CharField(max_length = 50)
+    password = models.CharField(max_length = 50, null=True, blank=True)
     active = models.BooleanField(default=True)
 
     def __unicode__(self):
-        return "%s - %s" % (self.stake, self.ward)
+        return "%s" % (self.ward,)
 
     class Meta:
         ordering = ['stake', 'ward']
 
 class DefaultNotifier(models.Model):
     SHOW_TO_OFFICES = (
-        ('d', 'Deacon'),
-        ('t', 'Teacher'),
-        ('z', 'Priest'),
+        ('d', 'Deacons Only'),
+        ('t', 'Teachers Only'),
+        ('z', 'Priests Only'),
         ('-', 'All Young Men'),
     )
 
@@ -128,3 +129,8 @@ class PersonProgress(models.Model):
         ordering = ['date_completed']
     
     
+class StakeAdmin(models.Model):
+    user = models.OneToOneField(User)
+    stake = models.ForeignKey(Stake)
+
+

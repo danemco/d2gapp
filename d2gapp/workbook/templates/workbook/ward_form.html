@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% if object %}
+<h1>Update Ward: <a href="{% url 'ward_list' %}">{{ object.stake }}</a> - {{ object }}</h1>
+{% else %}
+<h1>Add New Ward</h1>
+{% endif %}
+<div class="well">
+    <form action="." method="post">
+        {% csrf_token %}
+    <table class="table">
+        {{ form }}
+        <tr><td colspan="2">
+                <button type="submit" class="btn btn-raised btn-primary">{% if object %}Update{% else %}Create Ward{% endif %}</button>
+                {% if object %}
+                <a href="{% url 'ward_list' %}" class="pull-right btn btn-raised">Cancel / Go Back</a>
+                {% endif %}
+        </td></tr>
+</table>
+{% if object %}
+<hr>
+<h3>Default Notification List for {{ object.ward }}</h3>
+<p>Click on the person's name to update their information.</p>
+<table class="table">
+    {% if notification_list %}
+    <tr>
+        <th>Name</th>
+        <th>Position</th>
+        <th>Phone</th>
+        <th>Scope</th>
+    </tr>
+    {% endif %}
+
+    {% for pn in notification_list %}
+    <tr>
+        <td><a href="{% url 'defaultnotifier_update' pn.id %}">{{ pn.name }}</a></td>
+        <td>{{ pn.position }}</td>
+        <td>{{ pn.phone }}</td>
+        <td>{{ pn.get_show_to_display }}</td>
+    </tr>
+    {% empty %}
+    <tr>
+        <td>No default notification list found for this ward.</td>
+    </tr>
+    {% endfor %}
+</table>
+<a href="{% url 'defaultnotifier_create' object.id %}" class="btn btn-raised">Add a Person to the Default Noticiation List</a>
+{% endif %}
+</div>
+{% endblock %}
+
