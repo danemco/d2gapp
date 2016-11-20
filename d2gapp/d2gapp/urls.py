@@ -25,4 +25,5 @@ urlpatterns = [
     url(r'^$', TemplateView.as_view(template_name='base_home.html'), name="Test"),
     url(r'^', include('workbook.urls')),
     url(r'^admin/', admin.site.urls),
+    url(r'^accounts/', include('registration.backends.simple.urls')),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
