@@ -10,6 +10,8 @@ from django.forms.models import model_to_dict
 from django.http.response import HttpResponseRedirect
 from django.utils import timezone
 
+from django.contrib.auth.models import User
+
 from .models import Assignment, PersonProgress, Profile, ProfileNotify, Unit, DefaultNotifier, StakeAdmin
 from .forms import AssignmentForm, ProfileLoginForm, ProfileNotifyForm, ReviewSectionForm, PrepareTextMessageForm, RegisterProfileForm
 from .utils import notify_completed_assignment, notify_review_assignment
@@ -393,9 +395,12 @@ class StakeAdminWardList(ListView):
     template_name = 'workbook/unit_list.html'
 
     def get_queryset(self):
-        qs = super(StakeAdminWardList, self).get_queryset()
-        qs.filter(stake = self.request.user.stakeadmin.stake)
-        return qs
+        try:
+            qs = super(StakeAdminWardList, self).get_queryset()
+            qs.filter(stake = self.request.user.stakeadmin.stake)
+            return qs
+        except User.stakeadmin.RelatedObjectDoesNotExist:
+            return None
 
 class StakeAdminWardUpdate(UpdateView):
     model = Unit

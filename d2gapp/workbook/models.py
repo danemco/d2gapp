@@ -133,4 +133,7 @@ class StakeAdmin(models.Model):
     user = models.OneToOneField(User)
     stake = models.ForeignKey(Stake)
 
+    def __unicode__(self):
+        return "%s - %s" % (self.user, self.stake)
+
 
