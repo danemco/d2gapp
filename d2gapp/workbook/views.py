@@ -397,7 +397,7 @@ class StakeAdminWardList(ListView):
     def get_queryset(self):
         try:
             qs = super(StakeAdminWardList, self).get_queryset()
-            qs.filter(stake = self.request.user.stakeadmin.stake)
+            qs = qs.filter(stake = self.request.user.stakeadmin.stake)
             return qs
         except User.stakeadmin.RelatedObjectDoesNotExist:
             return None
